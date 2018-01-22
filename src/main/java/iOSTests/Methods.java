@@ -1,14 +1,22 @@
 package iOSTests;
 
+import org.apache.commons.io.FileUtils;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.ios.IOSDriver;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -20,6 +28,8 @@ public class Methods {
 
     AppiumDriver<WebElement> driver;
     protected static Logger logger;
+    String folder_name;
+    DateFormat df;
 
 
     void SetUp() throws Exception {
@@ -48,6 +58,8 @@ public class Methods {
 
     void SplashScreen() {
 
+        logger.info("Splash Screen Flipping");
+
         Assert.assertEquals("Больше никаких потерянных животных", driver.findElementByAccessibilityId("Больше никаких потерянных животных").getText());
         driver.findElementByAccessibilityId("Далее").click();
         Assert.assertEquals("Мониторинг активности вашего питомца", driver.findElementByAccessibilityId("Мониторинг активности вашего питомца").getText());
@@ -56,7 +68,17 @@ public class Methods {
 
     }
 
+    void SplashScreen1() {
+
+        logger.info("Splash Screen Flipping");
+
+        Assert.assertEquals("Больше никаких потерянных животных", driver.findElementByAccessibilityId("Больше никаких потерянных животных").getText());
+
+    }
+
     void Register() {
+
+        logger.info("Registering a user");
 
         Random login = new Random();
 
@@ -207,5 +229,13 @@ public class Methods {
         Assert.assertEquals(Variables.petname, driver.findElement(By.id("ru.averia.collars.stg:id/tv_pet_name")).getText());
     }
 
+    public void captureScreenShots() throws IOException {
+        folder_name="screenshot";
+        File f=((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        //create dir with given folder name
+        new File(folder_name).mkdir();
+        //coppy screenshot file into screenshot folder.
+        FileUtils.copyFile(f, new File(folder_name + "/" + "LastFailScreenshot.png"));
+    }
 
 }

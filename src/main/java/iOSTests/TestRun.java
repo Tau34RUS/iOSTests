@@ -1,9 +1,16 @@
 package iOSTests;
 
+import com.sun.jna.platform.FileUtils;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.TakesScreenshot;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+
+import java.io.File;
+import java.io.IOException;
 
 public class TestRun {
 
@@ -26,14 +33,23 @@ public class TestRun {
     }
 
     @AfterTest
-    public void After() {
+    public void After() throws IOException {
         logger.info("-----");
         logger.info("Userlogin: " + Variables.userlogin);
         logger.info("Userpass:  " + Variables.userpass);
         logger.info("-----");
         logger.info("Closing Application");
         App.Quit();
+    }
 
+    @AfterMethod
+    public void AfterMethod(ITestResult result) throws IOException {
+        if (result.getStatus()==2) {
+            logger.info("Test Failed!");
+            logger.info("Taking Screenshot...");
+            App.captureScreenShots();
+        }
+        logger.warn("Result is: " + result.getStatus());
     }
 
     @Test
@@ -41,11 +57,9 @@ public class TestRun {
 
         logger.info("-----");
         logger.info("Starting AppiumBased Tests");
-        logger.info("-   -");
+        logger.info("- - -");
 
         App.SplashScreen();
-
-        logger.info("Registering a user");
 
         //App.Register();
 
