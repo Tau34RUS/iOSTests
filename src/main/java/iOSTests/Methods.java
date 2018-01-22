@@ -37,7 +37,7 @@ public class Methods {
         capabilities.setCapability("app", Constants.appath);
 
         /* appium driver setup */
-        driver = new IOSDriver<WebElement>(new URL("http://127.0.0.1:4724/wd/hub"), capabilities);
+        driver = new IOSDriver<WebElement>(new URL("http://127.0.0.1:4730/wd/hub"), capabilities);
         driver.manage().timeouts().implicitlyWait(Constants.Timeout, TimeUnit.SECONDS);
         Variables.screensize = driver.manage().window().getSize();
         Variables.devicename = driver.getCapabilities().getCapability("deviceName").toString();
