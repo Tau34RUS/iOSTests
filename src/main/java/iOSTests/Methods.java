@@ -1,5 +1,6 @@
 package iOSTests;
 
+import io.appium.java_client.TouchAction;
 import org.apache.commons.io.FileUtils;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.ios.IOSDriver;
@@ -29,7 +30,6 @@ public class Methods {
     AppiumDriver<WebElement> driver;
     protected static Logger logger;
     String folder_name;
-    DateFormat df;
 
 
     void SetUp() throws Exception {
@@ -45,6 +45,8 @@ public class Methods {
         capabilities.setCapability("udid", Constants.UDID);
         capabilities.setCapability("automationName", "XCUITest");
         capabilities.setCapability("app", Constants.appath);
+        capabilities.setCapability("showXcodeLog", "true");
+        capabilities.setCapability("XCUITest", "true");
 
         /* appium driver setup */
         driver = new IOSDriver<WebElement>(new URL("http://127.0.0.1:4730/wd/hub"), capabilities);
@@ -68,14 +70,6 @@ public class Methods {
 
     }
 
-    void SplashScreen1() {
-
-        logger.info("Splash Screen Flipping");
-
-        Assert.assertEquals("Больше никаких потерянных животных", driver.findElementByAccessibilityId("Больше никаких потерянных животных").getText());
-
-    }
-
     void Register() {
 
         logger.info("Registering a user");
@@ -87,23 +81,20 @@ public class Methods {
         for (int i = 0; i < 16; i++) Variables.userlogin += login.nextInt(alphabet.length());
         Variables.userlogin = Variables.userlogin + "@test.user";
 
-        Assert.assertEquals("Регистрация", driver.findElement(By.id("ru.averia.collars.stg:id/bt_register")).getText());
+        driver.findElementByAccessibilityId("Регистрация").click();
 
-        driver.findElement(By.id("ru.averia.collars.stg:id/bt_register")).click();
-
-        Assert.assertEquals("Регистрация", driver.findElement(By.id("ru.averia.collars.stg:id/tv_title")).getText());
-
-        WebElement username = driver.findElement(By.id("ru.averia.collars.stg:id/et_email"));
-        username.click();
+        WebElement username = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]");
         username.sendKeys(Variables.userlogin);
 
-        WebElement password = driver.findElement(By.id("ru.averia.collars.stg:id/et_password"));
+        WebElement password = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[3]/XCUIElementTypeSecureTextField");
         password.click();
         password.sendKeys(Variables.userpass);
 
-        driver.findElement(By.id("ru.averia.collars.stg:id/bt_register")).click();
+        driver.findElementByAccessibilityId("Продолжить").click();
 
-        Assert.assertEquals("Добавить", driver.findElement(By.id("ru.averia.collars.stg:id/bt_add_pet")).getText());
+        driver.findElementByAccessibilityId("Разрешить").click();
+        Assert.assertEquals("Добавить питомца", driver.findElementByXPath("//XCUIElementTypeStaticText[@name=\"Добавить питомца\"]").getText());
+
 
     }
 
@@ -141,92 +132,55 @@ public class Methods {
 
 
     void AddPet() {
-        driver.findElement(By.id("ru.averia.collars.stg:id/maim_menu_action_pet")).click();
-        Assert.assertEquals("Добавить питомца", driver.findElement(By.id("ru.averia.collars.stg:id/tv_description_large")).getText());
-        driver.findElement(By.id("ru.averia.collars.stg:id/bt_add_pet")).click();
-        Assert.assertEquals("Добавить питомца", driver.findElement(By.id("ru.averia.collars.stg:id/tv_title")).getText());
-        WebElement petname = driver.findElement(By.id("ru.averia.collars.stg:id/et_name"));
-        petname.click();
+
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[1]").click();
+        Assert.assertEquals("Добавить питомца", driver.findElementByAccessibilityId("Добавить питомца").getText());
+        driver.findElementByAccessibilityId("Добавить").click();
+        WebElement petname = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]");
         petname.sendKeys(Variables.petname);
-        //TODO add gender random selection
-        driver.navigate().back();
-        driver.findElement(By.id("ru.averia.collars.stg:id/bt_next")).click();
+        driver.findElementByAccessibilityId("Девочка").click();
+        driver.findElementByAccessibilityId("addPet nextButton").click();
 
-        driver.findElement(By.id("ru.averia.collars.stg:id/iv_pet_ava")).click();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]").click();
+        driver.findElementByAccessibilityId("Сфотографировать").click();
+        driver.findElementByAccessibilityId("PhotoCapture").click();
+        driver.findElementByAccessibilityId("Исп. фото").click();
+        driver.findElementByAccessibilityId("Готово").click();
+        driver.findElementByAccessibilityId("addPet nextButton").click();
 
-        Assert.assertEquals("Выбрать источник", driver.findElement(By.id("android:id/title")).getText());
+        Assert.assertEquals("Добавить питомца", driver.findElementByAccessibilityId("addPet nextButton").getText());
+        driver.findElementByXPath("(//XCUIElementTypeSearchField[@name=\"Поиск\"])[1]").sendKeys("овчарка");
+        driver.findElementByAccessibilityId("Азиатская овчарка").click();
+        driver.findElementByAccessibilityId("addPet nextButton").click();
 
-        List<WebElement> choiseslist = driver.findElements(By.className("android.widget.LinearLayout"));
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[5]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeDatePicker/XCUIElementTypeOther/XCUIElementTypePickerWheel[1]").click();
 
-        logger.info("List: " + choiseslist);
-
-        choiseslist.get(1).click();
-
-
-        //TODO check cameras on different brands - try -> catch
-
-        //Asus
-        driver.findElement(By.id("com.asus.camera:id/button_capture")).click();
-
-        driver.findElement(By.id("com.asus.camera:id/button_used")).click();
-
-        //Xiomi
-
-        //HTC
-
-        //LG
-
-
-        driver.findElement(By.id("ru.averia.collars.stg:id/crop_image_menu_crop")).click();
-
-        driver.findElement(By.id("ru.averia.collars.stg:id/bt_next")).click();
-
-        Assert.assertEquals("Добавить питомца", driver.findElement(By.id("ru.averia.collars.stg:id/tv_title")).getText());
-        driver.findElement(By.id("ru.averia.collars.stg:id/bt_next")).click();
-
- /*     TODO dig out text input issue, Antons shitty code?
-        WebElement breed = driver.findElement(By.id("ru.averia.collars.stg:id/et_breed_title"));
-        breed.click();
-        breed.sendKeys(Variables.breed);
-
-        driver.findElements(By.className("android.widget.EditText")).get(0).sendKeys(Variables.breed);
-
-        ru.averia.collars.stg:id/et_breed_title
- */
         //Appium Magic
+        TouchAction ta1 = new TouchAction(driver);
+                ta1.press(273, 587);
+                ta1.moveTo(-3,-61);
+                ta1.release();
+                ta1.perform();
 
-        driver.findElement(By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.View/android.widget.FrameLayout/android.view.View/android.widget.FrameLayout/android.support.v7.widget.RecyclerView/android.view.View[1]")).click();
-//        MobileElement el1 = (MobileElement) adriver.findElementByXPath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.View/android.widget.FrameLayout/android.view.View/android.widget.FrameLayout/android.support.v7.widget.RecyclerView/android.view.View[1]");
-//        el1.click();
-//        adriver.navigate().back();
+        TouchAction ta2 = new TouchAction(driver);
+                ta2.press(274, 534);
+                ta2.moveTo(1,39);
+                ta2.release();
+                ta2.perform();
 
-        driver.findElement(By.id("ru.averia.collars.stg:id/bt_next")).click();
+        //End of Magic
+
+        driver.findElementByAccessibilityId("addPet nextButton").click();
 
         Assert.assertEquals("Возраст и дата рождения", driver.findElement(By.id("ru.averia.collars.stg:id/tv_cap")).getText());
-        WebElement birthyear = driver.findElement(By.id("ru.averia.collars.stg:id/et_year"));
-        birthyear.click();
+        WebElement birthyear = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeTextField");
         birthyear.sendKeys(Variables.birthyear);
 
-        WebElement birthmonth = driver.findElement(By.id("ru.averia.collars.stg:id/et_month"));
-        birthmonth.click();
+        WebElement birthmonth = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeTextField");
         birthmonth.sendKeys(Variables.birthmonth);
 
-        driver.navigate().back();
-        driver.findElement(By.id("ru.averia.collars.stg:id/bt_next")).click();
+        driver.findElementByAccessibilityId("addPet doneButton").click();
 
-        WebElement petweight = driver.findElement(By.id("ru.averia.collars.stg:id/til_weight"));
-        petweight.click();
-        petweight.sendKeys(Variables.petweight);
-
-        WebElement petwheight = driver.findElement(By.id("ru.averia.collars.stg:id/et_height"));
-        petwheight.click();
-        petwheight.sendKeys(Variables.petheight);
-
-        driver.navigate().back();
-        driver.findElement(By.id("ru.averia.collars.stg:id/bt_next")).click();
-
-        Assert.assertEquals("Добавьте ошейник", driver.findElement(By.id("ru.averia.collars.stg:id/tv_add_collar_title1")).getText());
-        Assert.assertEquals(Variables.petname, driver.findElement(By.id("ru.averia.collars.stg:id/tv_pet_name")).getText());
     }
 
     public void captureScreenShots() throws IOException {
@@ -236,6 +190,28 @@ public class Methods {
         new File(folder_name).mkdir();
         //coppy screenshot file into screenshot folder.
         FileUtils.copyFile(f, new File(folder_name + "/" + "LastFailScreenshot.png"));
+    }
+
+    public void CheckScreens(){
+
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[1]").click();
+        Assert.assertEquals("Возраст и дата рождения", driver.findElementByAccessibilityId("Питомцы  ￼").getText());
+
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[2]").click();
+
+        driver.findElementByAccessibilityId("Разрешить").click();
+
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[3]").click();
+        Assert.assertEquals("Возраст и дата рождения", driver.findElementByAccessibilityId("Редактировать профиль").getText());
+
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[4]").click();
+        Assert.assertEquals("Возраст и дата рождения", driver.findElementByAccessibilityId("Log").getText());
+
+
+
+
+
+
     }
 
 }

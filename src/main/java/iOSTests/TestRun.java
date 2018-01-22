@@ -53,7 +53,7 @@ public class TestRun {
     }
 
     @Test
-    public void AndroidTestRegister() {
+    public void AndroidTestRegister() throws Exception {
 
         logger.info("-----");
         logger.info("Starting AppiumBased Tests");
@@ -63,6 +63,18 @@ public class TestRun {
 
         App.Register();
 
+        //App.Restart();
+
+        //App.SplashScreen();
+
+        App.Login();
+
+        App.AddPet();
+
+        App.CheckScreens();
+
     }
+
+
 
 }
