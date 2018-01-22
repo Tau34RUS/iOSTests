@@ -61,7 +61,7 @@ public class TestRun {
 
         App.SplashScreen();
 
-        //App.Register();
+        App.Register();
 
     }
 
