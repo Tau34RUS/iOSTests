@@ -1,15 +1,12 @@
 package iOSTests;
 
-import com.sun.jna.platform.FileUtils;
 import org.apache.log4j.Logger;
-import org.openqa.selenium.TakesScreenshot;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import java.io.File;
 import java.io.IOException;
 
 public class TestRun {
@@ -53,7 +50,7 @@ public class TestRun {
     }
 
     @Test
-    public void AndroidTestRegister() throws Exception {
+    public void iOSTestRegister() throws Exception {
 
         logger.info("-----");
         logger.info("Starting AppiumBased Tests");
@@ -63,18 +60,31 @@ public class TestRun {
 
         App.Register();
 
-        //App.Restart();
+    }
 
-        //App.SplashScreen();
+    @Test(dependsOnMethods = "iOSTestRegister")
+    public void iOSTestLogin() throws Exception {
+
+        App.Restart();
+
+        App.SplashScreen();
 
         App.Login();
 
+    }
+
+    @Test(dependsOnMethods = "iOSTestLogin")
+    public void iOSTestAddPet() throws Exception {
+
         App.AddPet();
+
+    }
+
+    @Test(dependsOnMethods = "iOSTestLogin")
+    public void iOSTestScreens() throws Exception {
 
         App.CheckScreens();
 
     }
-
-
 
 }

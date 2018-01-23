@@ -92,7 +92,13 @@ public class Methods {
 
         driver.findElementByAccessibilityId("Продолжить").click();
 
-        driver.findElementByAccessibilityId("Разрешить").click();
+        try {
+            driver.findElementByAccessibilityId("Разрешить").click();
+        }
+        catch (Exception e){
+            e.getMessage();
+            logger.info("No access request found");
+        }
         Assert.assertEquals("Добавить питомца", driver.findElementByXPath("//XCUIElementTypeStaticText[@name=\"Добавить питомца\"]").getText());
 
 
@@ -100,24 +106,17 @@ public class Methods {
 
     void Login() {
 
-
-        Assert.assertEquals("Войти", driver.findElement(By.id("ru.averia.collars.stg:id/bt_login")).getText());
-        driver.findElement(By.id("ru.averia.collars.stg:id/bt_login")).click();
-
-        Assert.assertEquals("Войти", driver.findElement(By.id("ru.averia.collars.stg:id/tv_title")).getText());
-        Assert.assertEquals("Войти", driver.findElement(By.id("ru.averia.collars.stg:id/bt_login")).getText());
-
-        WebElement username = driver.findElement(By.id("ru.averia.collars.stg:id/et_email"));
-        username.click();
-        username.sendKeys(Variables.userlogin);
-
-        WebElement password = driver.findElement(By.id("ru.averia.collars.stg:id/et_password"));
-        password.click();
-        password.sendKeys(Variables.userpass);
-
-        driver.findElement(By.id("ru.averia.collars.stg:id/bt_login")).click();
-
-        Assert.assertEquals("Добавить", driver.findElement(By.id("ru.averia.collars.stg:id/bt_add_pet")).getText());
+        driver.findElementByAccessibilityId("Войти").click();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeTextField").sendKeys(Variables.userlogin);
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeSecureTextField").sendKeys(Variables.userpass);
+        driver.findElementByXPath("//XCUIElementTypeButton[@name=\"Войти\"]").click();
+        try {
+            driver.findElementByAccessibilityId("Разрешить").click();
+        }
+        catch (Exception e){
+            e.getMessage();
+            logger.info("No access request found");
+        }
 
     }
 
@@ -126,6 +125,8 @@ public class Methods {
     }
 
     void Restart() throws Exception{
+
+        logger.info("App Restart");
         Quit();
         SetUp();
     }
@@ -133,6 +134,7 @@ public class Methods {
 
     void AddPet() {
 
+        logger.info("Adding new pet");
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[1]").click();
         Assert.assertEquals("Добавить питомца", driver.findElementByAccessibilityId("Добавить питомца").getText());
         driver.findElementByAccessibilityId("Добавить").click();
@@ -142,18 +144,26 @@ public class Methods {
         driver.findElementByAccessibilityId("addPet nextButton").click();
 
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]").click();
+
         driver.findElementByAccessibilityId("Сфотографировать").click();
+        try {
+            driver.findElementByAccessibilityId("Разрешить").click();
+        }
+        catch (Exception e){
+            e.getMessage();
+            logger.info("No access request found");
+        }
         driver.findElementByAccessibilityId("PhotoCapture").click();
         driver.findElementByAccessibilityId("Исп. фото").click();
         driver.findElementByAccessibilityId("Готово").click();
         driver.findElementByAccessibilityId("addPet nextButton").click();
 
-        Assert.assertEquals("Добавить питомца", driver.findElementByAccessibilityId("addPet nextButton").getText());
+        Assert.assertEquals("addPet nextButton", driver.findElementByAccessibilityId("addPet nextButton").getText());
         driver.findElementByXPath("(//XCUIElementTypeSearchField[@name=\"Поиск\"])[1]").sendKeys("овчарка");
         driver.findElementByAccessibilityId("Азиатская овчарка").click();
         driver.findElementByAccessibilityId("addPet nextButton").click();
 
-        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[5]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeDatePicker/XCUIElementTypeOther/XCUIElementTypePickerWheel[1]").click();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeTextField").click();
 
         //Appium Magic
         TouchAction ta1 = new TouchAction(driver);
@@ -172,7 +182,6 @@ public class Methods {
 
         driver.findElementByAccessibilityId("addPet nextButton").click();
 
-        Assert.assertEquals("Возраст и дата рождения", driver.findElement(By.id("ru.averia.collars.stg:id/tv_cap")).getText());
         WebElement birthyear = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeTextField");
         birthyear.sendKeys(Variables.birthyear);
 
@@ -195,22 +204,23 @@ public class Methods {
     public void CheckScreens(){
 
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[1]").click();
-        Assert.assertEquals("Возраст и дата рождения", driver.findElementByAccessibilityId("Питомцы  ￼").getText());
+        Assert.assertEquals("Питомцы  ￼", driver.findElementByAccessibilityId("Питомцы  ￼").getText());
 
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[2]").click();
 
-        driver.findElementByAccessibilityId("Разрешить").click();
+        try {
+            driver.findElementByAccessibilityId("Разрешить").click();
+        }
+        catch (Exception e){
+            e.getMessage();
+            logger.info("No access request found");
+        }
 
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[3]").click();
-        Assert.assertEquals("Возраст и дата рождения", driver.findElementByAccessibilityId("Редактировать профиль").getText());
+        Assert.assertEquals("Редактировать профиль", driver.findElementByAccessibilityId("Редактировать профиль").getText());
 
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[4]").click();
-        Assert.assertEquals("Возраст и дата рождения", driver.findElementByAccessibilityId("Log").getText());
-
-
-
-
-
+        Assert.assertEquals("Log", driver.findElementByAccessibilityId("Log").getText());
 
     }
 
