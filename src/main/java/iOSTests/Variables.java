@@ -20,7 +20,7 @@ public class Variables {
     static String phonenumber;
 
     static {
-        userpass = "123456";
+        userpass = "12345678";
         petname="Alessia";
         petweight="50";
         petheight="43";
