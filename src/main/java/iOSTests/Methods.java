@@ -393,19 +393,19 @@ public class Methods {
         Sleep(1);
     }
 
-    public void ScrollUp(String target){
+    public void ScrollUp(String elementXpath){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         HashMap scrollObject = new HashMap();
         scrollObject.put("direction", "up");
-        scrollObject.put("xpath", target);
+        scrollObject.put("xpath", elementXpath);
         js.executeScript("mobile: swipe", scrollObject);
     }
 
-    public void ScrollDown(String target){
+    public void ScrollDown(String elementXpath){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         HashMap scrollObject = new HashMap();
         scrollObject.put("direction", "down");
-        scrollObject.put("xpath", target);
+        scrollObject.put("xpath", elementXpath);
         js.executeScript("mobile: swipe", scrollObject);
     }
 
