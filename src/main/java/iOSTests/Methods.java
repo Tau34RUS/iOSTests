@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import static iOSTests.Variables.petage;
+
 @SuppressWarnings("WeakerAccess")
 public class Methods {
 
@@ -36,7 +38,7 @@ public class Methods {
         /* appium setup */
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("platformName", "iOS");
-        capabilities.setCapability("PlatformVersion", "11.2");
+        capabilities.setCapability("PlatformVersion", "11.3");
         capabilities.setCapability("deviceName", "iPhone 5s");
         capabilities.setCapability("udid", Constants.UDID);
         capabilities.setCapability("automationName", "XCUITest");
@@ -87,10 +89,11 @@ public class Methods {
         Assert.assertEquals("Регистрация", driver.findElementByAccessibilityId("Регистрация").getText());
         driver.findElementByAccessibilityId("Регистрация").click();
 
-        WebElement username = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]");
+        WebElement username = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeTextField");
         username.sendKeys(Variables.userlogin);
 
-        WebElement password = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[3]/XCUIElementTypeSecureTextField");
+        //плохой вариант - селектор меняется в зависимости от auth password secureButton, но других нет
+        WebElement password = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeSecureTextField");
         password.sendKeys(Variables.userpass);
 
         logger.info("Userlogin: " + Variables.userlogin);
@@ -98,12 +101,6 @@ public class Methods {
 
         driver.findElementByAccessibilityId("Продолжить").click();
 
-        /*try {
-            driver.findElementByAccessibilityId("Разрешить").click();
-        } catch (Exception e) {
-            e.getMessage();
-            logger.info("No access request found");
-        }*/
         iOSAllowAccess();
         Assert.assertEquals("Добавить питомца", driver.findElementByXPath("//XCUIElementTypeStaticText[@name=\"Добавить питомца\"]").getText());
 
@@ -147,54 +144,46 @@ public class Methods {
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[1]").click();
         Assert.assertEquals("Добавить питомца", driver.findElementByAccessibilityId("Добавить питомца").getText());
         driver.findElementByAccessibilityId("Добавить").click();
-        WebElement petname = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]");
+        WebElement petname = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTextField");
         petname.sendKeys(Variables.petname);
         driver.findElementByAccessibilityId("Девочка").click();
-        driver.findElementByAccessibilityId("addPet nextButton").click();
 
-        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]").click();
+        SwipeDown();
+        driver.findElementByAccessibilityId("addPet addPhoto placeholder").click();
 
         PhonePhoto();
 
-        driver.findElementByAccessibilityId("addPet nextButton").click();
+        driver.findElementByAccessibilityId("next screen button enabled").click();
 
-        //Assert.assertEquals("addPet nextButton", driver.findElementByAccessibilityId("addPet nextButton").getText());
         try {
             driver.findElementByAccessibilityId("Алабай").click();
         } catch (Exception e) {
             e.getMessage();
             logger.warn("No List Element 'Breed' Found!");
         }
-        driver.findElementByXPath("(//XCUIElementTypeSearchField[@name=\"Поиск\"])[1]").sendKeys("овчарка");
+
+
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTextField").sendKeys("овчарка");
         driver.findElementByAccessibilityId("Азиатская овчарка").click();
-        driver.findElementByAccessibilityId("addPet nextButton").click();
+        driver.findElementByAccessibilityId("next screen button enabled").click();
 
-        Assert.assertEquals("Дата рождения", driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeTextField").getText());
-        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeTextField").click();
+        Assert.assertEquals("Возраст", driver.findElementByXPath("//XCUIElementTypeNavigationBar[@name=\"Возраст\"]").getAttribute("name"));
 
-        //Appium Magic
-        new TouchAction(driver).tap(48, 428).perform();
-        new TouchAction(driver).tap(132, 428).perform();
-        new TouchAction(driver).tap(247, 428).perform();
+        //set age
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeOther[1]/XCUIElementTypeTextField").sendKeys(petage);
+        new TouchAction(driver).tap(156, 492).perform();
 
-        //End of Magic
+        driver.findElementByAccessibilityId("next screen button enabled").click();
 
-        //WebElement birthyear = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeTextField");
-        //birthyear.sendKeys(Variables.birthyear);
-        // здесь должна быть проверка - введенные элементы запомнены
-        //WebElement birthmonth = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeTextField");
-        //birthmonth.sendKeys(Variables.birthmonth);
-        driver.findElementByAccessibilityId("addPet nextButton").click();
 
-        WebElement petweight = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeTextField");
-        petweight.click();
+        Assert.assertEquals("Вес и высота", driver.findElementByXPath("//XCUIElementTypeNavigationBar[@name=\"Вес и высота\"]").getAttribute("name"));
+        WebElement petweight = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeOther[1]/XCUIElementTypeTextField");
         petweight.sendKeys(Variables.petweight);
 
-        WebElement petwheight = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeTextField");
-        petwheight.click();
+        WebElement petwheight = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeTextField");
         petwheight.sendKeys(Variables.petheight);
 
-        driver.findElementByAccessibilityId("addPet doneButton").click();
+        driver.findElementByAccessibilityId("finalize process enabled").click();
         Assert.assertEquals("Не сейчас", driver.findElementByAccessibilityId("Не сейчас").getText());
         driver.findElementByAccessibilityId("Не сейчас").click();
 
@@ -254,19 +243,19 @@ public class Methods {
         driver.findElementByAccessibilityId("Добавить").click();
 
         driver.findElementByAccessibilityId("Найти устройство").click();
-        try{driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell").clear();}
+        try{driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]").clear();}
         catch (org.openqa.selenium.NoSuchElementException e) {
             logger.info("No BLE Devices List");
         }
 
-        try{driver.findElementByXPath("//XCUIElementTypeTable[@name=\"Идет выполнение операции\"]").clear();}
+        try{driver.findElementByXPath("ic_progress_indicator").clear();}
         catch (org.openqa.selenium.NoSuchElementException e) {
             logger.info("No BLE Devices Page");
         }
 
         driver.findElementByAccessibilityId("Добавить ошейник").click();
-        Assert.assertEquals("Добавить ошейник", driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Добавить ошейник\"]").getText());
-        driver.findElementByAccessibilityId("addPet close btn").click();
+        Assert.assertEquals("Добавить ошейник", driver.findElementByXPath("//XCUIElementTypeNavigationBar[@name=\"Добавить ошейник\"]").getAttribute("name"));
+        driver.findElementByAccessibilityId("addPet dismiss btn").click();
         Assert.assertEquals("Добавьте ошейник", driver.findElementByAccessibilityId("Добавьте ошейник").getText());
 
     }
@@ -277,7 +266,8 @@ public class Methods {
         iOSAllowAccess();
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[3]").click();
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[1]").click();
-   }
+
+    }
 
     public void Map() {
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[2]").click();
@@ -285,8 +275,6 @@ public class Methods {
         driver.findElementByAccessibilityId("petsMap userCenter btn").click();
         driver.findElementByAccessibilityId("petsMap nearbyPets btn normal").click();
 
-        //Sleep(20);
-        //        driver.findElementByAccessibilityId("Правовые документы").clear();
     }
 
     public void UserProfile() {
@@ -304,18 +292,6 @@ public class Methods {
         driver.hideKeyboard();
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[5]/XCUIElementTypeTextField").sendKeys("averia@test.com");
         driver.hideKeyboard();
-        /*logger.info("Swipe up");
-        SwipeUp();*/
-
-       /* logger.info("Fill phone number");
-        Random login = new Random();
-
-        String alphabet = "1234567890";
-        Variables.phonenumber = "";
-        for (int i = 0; i < 11; i++) Variables.phonenumber += login.nextInt(alphabet.length());
-
-        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[9]/XCUIElementTypeTextField").sendKeys(Variables.phonenumber);
-*/
 
        String Photo = "//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther";
        logger.info("Scroll down");
@@ -354,19 +330,10 @@ public class Methods {
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[6]/XCUIElementTypeTextField").clear();
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[6]/XCUIElementTypeTextField").sendKeys("33");
 
-        logger.info("Vguh-vguh");
-
-        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeTextField").click();
-        driver.hideKeyboard();
+        driver.findElementByAccessibilityId("Toolbar Done Button").click();
 
         String target = "//XCUIElementTypeApplication[@name=\\\"Averia Collar\\\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[7]/XCUIElementTypeTextField";
         ScrollUp(target);
-
-        /*JavascriptExecutor js = (JavascriptExecutor) driver;
-        HashMap scrollObject = new HashMap();
-        scrollObject.put("direction", "up");
-        scrollObject.put("xpath", "//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[7]/XCUIElementTypeTextField");
-        js.executeScript("mobile: swipe", scrollObject);*/
 
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[7]/XCUIElementTypeTextField").clear();
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[7]/XCUIElementTypeTextField").sendKeys("33");

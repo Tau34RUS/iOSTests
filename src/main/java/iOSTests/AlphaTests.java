@@ -70,7 +70,7 @@ public class AlphaTests {
         logger.info("Adding a pet");
         App.AddPet();
 
-    } //throws Exception
+    }
 
     @Test(dependsOnMethods = "iOSTestAddPet")
     public void iOSTestAddCollar() {
