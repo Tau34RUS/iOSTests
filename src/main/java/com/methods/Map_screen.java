@@ -17,7 +17,7 @@ public class Map_screen extends Common {
     //проверить
     public Map_screen(AppiumDriver<MobileElement> driver)  {
         super(driver);
-        logger = Logger.getLogger("AndroidTestLogger");
+        logger = Logger.getLogger("iOSTestLogger");
         PageFactory.initElements(new AppiumFieldDecorator(driver, Timeout, TimeUnit.SECONDS), this);
     }
 

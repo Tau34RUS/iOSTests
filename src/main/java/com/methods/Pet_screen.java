@@ -1,11 +1,14 @@
 package com.methods;
 
+import com.vars.vars;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
@@ -25,52 +28,32 @@ public class Pet_screen extends Common{
         PageFactory.initElements(new AppiumFieldDecorator(driver, Timeout, TimeUnit.SECONDS), this);
     }
 
-    /*public void addCollar() {
-
-        Assert.assertEquals("Добавьте ошейник" ,driver.findElementById("ru.averia.tracker:id/tv_add_collar_title1").getText());
-        driver.findElementById("ru.averia.tracker:id/tv_add_collar").click();
-
-        driver.findElementById("ru.averia.tracker:id/bt_search").click();
-        try{driver.findElementById("ru.averia.tracker:id/container_list").clear();}
-        catch (NoSuchElementException e) {
-            logger.info("No BLE Devices List");
-        }
-
-        try{driver.findElementByXPath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[1]/android.view.ViewGroup/android.view.ViewGroup[2]/android.support.v7.widget.RecyclerView/android.view.ViewGroup[1]").clear();}
-        catch (NoSuchElementException e) {
-            logger.info("No BLE Devices Page");
-        }
-
-        driver.findElementById("ru.averia.tracker:id/iv_back").click();
-
-    }*/
-
-    //проверить новую реализацию (old public void AddCollar())
-    //уточнить у Влада насчёт No BLE Devices List и No BLE Devices Page
     public void addCollar() {
 
         Assert.assertEquals("Добавьте ошейник", driver.findElementByAccessibilityId("Добавьте ошейник").getText());
         driver.findElementByAccessibilityId("Добавить").click();
 
         driver.findElementByAccessibilityId("Найти устройство").click();
-        try{driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell").clear();}
+        try{driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]").clear();}
         catch (org.openqa.selenium.NoSuchElementException e) {
             logger.info("No BLE Devices List");
         }
 
-        try{driver.findElementByXPath("//XCUIElementTypeTable[@name=\"Идет выполнение операции\"]").clear();}
+        try{driver.findElementByXPath("ic_progress_indicator").clear();}
         catch (org.openqa.selenium.NoSuchElementException e) {
             logger.info("No BLE Devices Page");
         }
 
         driver.findElementByAccessibilityId("Добавить ошейник").click();
-        driver.findElementByAccessibilityId("addPet close btn").click();
+        Assert.assertEquals("Добавить ошейник", driver.findElementByXPath("//XCUIElementTypeNavigationBar[@name=\"Добавить ошейник\"]").getAttribute("name"));
+        driver.findElementByAccessibilityId("addPet dismiss btn").click();
+        Assert.assertEquals("Добавьте ошейник", driver.findElementByAccessibilityId("Добавьте ошейник").getText());
     }
 
     //проверить, что за элемент
     public void petEdit(String device) {
 
-            swipeUpToElementId("ru.averia.tracker:id/tv_about");
+            //--определение геолокации в навбаре?--swipeUpToElementId("ru.averia.tracker:id/tv_about");
 
     }
 
@@ -80,43 +63,61 @@ public class Pet_screen extends Common{
         logger.info(device + ": Adding Pet");
 
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[1]").click();
-        //проверить элемент expected
-        Assert.assertEquals("Добавить питомца", driver.findElement(By.id("ru.averia.tracker:id/tv_description_large")).getText());
+
+        Assert.assertEquals("Добавить питомца", driver.findElementByAccessibilityId("Добавить питомца").getText());
         driver.findElementByAccessibilityId("Добавить").click();
-        //нет проверки - добавить
-        Assert.assertEquals("Добавить питомца", driver.findElement(By.id("ru.averia.tracker:id/tv_title")).getText());
 
-        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]").sendKeys(petname);
+        Assert.assertEquals("Добавить питомца", driver.findElementByXPath("//XCUIElementTypeNavigationBar[@name=\"Добавить питомца\"]").getAttribute("name"));
 
-        //нет локатора (был на след.экране) - добавить
-        driver.findElement(By.id("ru.averia.tracker:id/iv_pet_ava")).click();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTextField").sendKeys(vars.petname);
+        swipeDown();
+        driver.findElementByAccessibilityId("addPet addPhoto placeholder").click();
 
         phonePhoto();
+        /*stop*/
 
-        driver.findElement(By.id("ru.averia.tracker:id/crop_image_menu_crop")).click();
+        //driver.navigate().back();
+        driver.findElementByAccessibilityId("next screen button enabled").click();
 
-        driver.navigate().back();
-        driver.findElement(By.id("ru.averia.tracker:id/bt_next")).click();
+        try {
+            driver.findElementByAccessibilityId("Алабай").click();
+        } catch (Exception e) {
+            e.getMessage();
+            logger.warn("No List Element 'Breed' Found!");
+        }
+
+
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTextField").sendKeys("овчарка");
+        driver.findElementByAccessibilityId("Азиатская овчарка").click();
+        driver.findElementByAccessibilityId("next screen button enabled").click();
+
+        Assert.assertEquals("Возраст", driver.findElementByXPath("//XCUIElementTypeNavigationBar[@name=\"Возраст\"]").getAttribute("name"));
+
+        //set age
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeOther[1]/XCUIElementTypeTextField").sendKeys(vars.petage);
+        new TouchAction(driver).tap(156, 492).perform();
+
+        driver.findElementByAccessibilityId("next screen button enabled").click();
+
+
+        Assert.assertEquals("Вес и высота", driver.findElementByXPath("//XCUIElementTypeNavigationBar[@name=\"Вес и высота\"]").getAttribute("name"));
+        WebElement petweight = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeOther[1]/XCUIElementTypeTextField");
+        petweight.sendKeys(vars.petweight);
+
+        WebElement petwheight = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeTextField");
+        petwheight.sendKeys(vars.petheight);
+
+        driver.findElementByAccessibilityId("finalize process enabled").click();
+        Assert.assertEquals("Не сейчас", driver.findElementByAccessibilityId("Не сейчас").getText());
+        driver.findElementByAccessibilityId("Не сейчас").click();
+        /*driver.findElement(By.id("ru.averia.tracker:id/bt_next")).click();
 
         Assert.assertEquals("Добавить питомца", driver.findElement(By.id("ru.averia.tracker:id/tv_title")).getText());
         driver.findElement(By.id("ru.averia.tracker:id/bt_next")).click();
-/*
-        //Shitty Magic
-        (new TouchAction(driver)).tap(462, 710).perform();
-        (new TouchAction(driver)).tap(400, 400).perform();
 
-        try {
-            driver.findElementByXPath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout/android.support.v7.widget.RecyclerView/android.view.ViewGroup[4]").click();
-        }
-        catch (org.openqa.selenium.NoSuchElementException e) {
-            logger.warn("No List Element 'Breed' Found!");
-        }
-*/
         driver.navigate().back();
 
         driver.findElement(By.id("ru.averia.tracker:id/bt_next")).click();
-
-        //driver.findElementByXPath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.View/android.widget.FrameLayout/android.view.View/android.widget.FrameLayout/android.support.v7.widget.RecyclerView/android.view.View[2]").click();
 
         driver.findElement(By.xpath("//*[@text='Австралийская келпи']")).click();
         driver.findElementById("ru.averia.tracker:id/bt_next").click();
@@ -131,7 +132,8 @@ public class Pet_screen extends Common{
 
         driver.navigate().back();
 
-        driver.findElementById("ru.averia.tracker:id/bt_next").click();
+        driver.findElementById("ru.averia.tracker:id/bt_next").click();*/
+
     }
 
 }
