@@ -6,6 +6,7 @@ import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.apache.log4j.Logger;
 import org.apache.tools.ant.filters.TokenFilter;
 import org.apache.tools.ant.taskdefs.condition.Contains;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
@@ -18,14 +19,13 @@ public class Main_screen extends Common {
     protected Logger logger;
 
     //??проверить
-    public Main_screen(AppiumDriver<MobileElement> driver)  {
+    public Main_screen(AppiumDriver<MobileElement> driver) {
 
         super(driver);
         logger = Logger.getLogger("iOSTestLogger");
         PageFactory.initElements(new AppiumFieldDecorator(driver, com.vars.consts.Timeout, TimeUnit.SECONDS), this);
     }
 
-    //всё проверить - нет таких локаторов
     public void checkScreen(String device) {
 
         logger.info(device + ": Checking Main screen objects:");
@@ -56,23 +56,57 @@ public class Main_screen extends Common {
         driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Расход калорий\"]").clear();
         driver.findElementByAccessibilityId(petname).click();
 
-        logger.info(device + ": - Achievements");
+        logger.info(device + ": - Tracks and Achievements");
         swipeUp();
         //alternative
         // scrollUp("//XCUIElementTypeApplication[@name=\\\"Averia Collar\\\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[6]");
-        //driver.findElementById("ru.averia.tracker:id/container_goto_all_tracks").click();
-        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[6]").click();
-        //--first track --driver.findElementByXPath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[1]/android.view.ViewGroup/android.widget.FrameLayout/android.support.v7.widget.RecyclerView/android.view.ViewGroup[2]").click();
-        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]").click();
-        //--return to previous screen?-- driver.findElementByXPath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[1]/android.view.ViewGroup[1]/android.view.ViewGroup/android.widget.ImageButton").click();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[6]").click(); //Недавние прогулки
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]").click();//первый трек
         driver.findElementByAccessibilityId("Все прогулки").click();
-        //--return to previous screen?--driver.findElementByXPath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[1]/android.view.ViewGroup[1]/android.view.ViewGroup/android.widget.ImageButton").click();
         driver.findElementByAccessibilityId(petname).click();
-        //--go to the first track from recent block-- driver.findElementByXPath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/android.view.ViewGroup/android.support.v4.view.ViewPager/android.view.ViewGroup/android.widget.FrameLayout/android.view.ViewGroup/android.widget.ScrollView/android.widget.LinearLayout/android.widget.LinearLayout[2]/android.support.v7.widget.RecyclerView/android.view.ViewGroup[1]/android.widget.ImageView").click();
-        driver.findElementByXPath("(//XCUIElementTypeButton[@name=\"Подробнее\"])[2]").click();
-        //--???--driver.findElementById("ru.averia.tracker:id/iv_img").clear();
-        //--иконка - приложение отслеживает геопозицию над навбаром - нет в iOS--driver.findElementById("ru.averia.tracker:id/iv_back").click();
+        //может потребоваться доп.скролл - не видит элемент
+        driver.findElementByAccessibilityId("Добавлен ошейник").click();
+
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeImage[2]").clear();//картинка
+        driver.findElementByAccessibilityId("addPet close btn").click();
 
     }
 
+    public void walkStats(String device) {
+
+        logger.info(device + ": Checking Main screen stats");
+        swipeDown();
+        driver.findElementByAccessibilityId("Шаг").click();
+        sleep(5);
+        Assert.assertEquals("Ходьба", driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Ходьба\"]").getAttribute("name"));
+        if (isElementPresent(By.id("stats_noActivity"))) {
+            logger.error("Stats");
+        } else {
+            logger.error("No stats");
+        }
+        driver.findElementByAccessibilityId("Бег").click();
+        sleep(5);
+        Assert.assertEquals("Бег и быстрый бег", driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Бег и быстрый бег\"]").getAttribute("name"));
+        if (isElementPresent(By.id("stats_noActivity"))) {
+            logger.error("Stats");
+        } else {
+            logger.error("No stats");
+        }
+        driver.findElementByAccessibilityId("Отдых").click();
+        sleep(5);
+        Assert.assertEquals("Отдых", driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Отдых\"]").getAttribute("name"));
+        if (isElementPresent(By.id("stats_noActivity"))) {
+            logger.error("Stats");
+        } else {
+            logger.error("No stats");
+        }
+        driver.findElementByAccessibilityId("Расход калорий").click();
+        sleep(5);
+        Assert.assertEquals("Расход калорий", driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Расход калорий\"]").getAttribute("name"));
+        if (isElementPresent(By.id("stats_noActivity"))) {
+            logger.error("Stats");
+        } else {
+            logger.error("No stats");
+        }
+    }
 }

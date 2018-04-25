@@ -6,6 +6,7 @@ import io.appium.java_client.TouchAction;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -160,4 +161,14 @@ public class Common {
         js.executeScript("mobile: swipe", scrollObject);
     }
 
+    public boolean isElementPresent(By by){
+        try {
+            driver.findElements(by);
+            return true;
+        } catch (NoSuchElementException e){
+            return false;
+        }
+    }
+
 }
+

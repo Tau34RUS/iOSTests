@@ -21,62 +21,44 @@ public class Profile_screen extends Common {
 
     public Profile_screen(AppiumDriver<MobileElement> driver)  {
         super(driver);
-        logger = Logger.getLogger("AndroidTestLogger");
+        logger = Logger.getLogger("iOSTestLogger");
         PageFactory.initElements(new AppiumFieldDecorator(driver, Timeout, TimeUnit.SECONDS), this);
     }
 
     public void userProfileView(String device) {
 
-        driver.findElementById("ru.averia.tracker:id/main_menu_action_profile").click();
-        driver.findElementById("ru.averia.tracker:id/iv_ava").clear();
-        driver.findElementById("ru.averia.tracker:id/tv_name").clear();
-        driver.findElementById("ru.averia.tracker:id/tv_info").clear();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[3]").click();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther").clear();//аватар
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeOther[1]").clear();//ФИ
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeOther[2]").clear();//заметка
 
     }
 
     public void userProfileEdit(String device) {
 
-        driver.findElementById("ru.averia.tracker:id/main_menu_action_profile").click();
-        driver.findElementById("ru.averia.tracker:id/iv_ava").clear();
-        driver.findElementById("ru.averia.tracker:id/tv_name").clear();
-        driver.findElementById("ru.averia.tracker:id/tv_info").clear();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[3]").click();//переход в настройки
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther").clear();//аватар
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeOther[1]").clear();//ФИ
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeOther[2]").clear();//заметка
 
-        switch (devicename) {
-            case (phone_nexus_5): //damned cyanogen
-                break;
-            default:
+        driver.findElementByAccessibilityId("Редактировать профиль").click();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[3]/XCUIElementTypeTextField").sendKeys("Tester");
+        driver.hideKeyboard();
 
-                driver.findElementById("ru.averia.tracker:id/bt_edit_profile").click();
-                driver.findElementById("ru.averia.tracker:id/et_last_name").sendKeys("Tester");
-                logger.info("Swipe up");
-                swipeUp();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[5]/XCUIElementTypeTextField").sendKeys("averia@test.com");
+        driver.hideKeyboard();
 
-                logger.info("Fill phone number");
-                Random login = new Random();
-
-                String alphabet = "1234567890";
-                phonenumber = "";
-                for (int i = 0; i < 11; i++) phonenumber += login.nextInt(alphabet.length());
-                driver.findElementById("ru.averia.tracker:id/et_phone").sendKeys(phonenumber);
-
-                logger.info("Swipe down");
-                swipeDown();
-
-                driver.findElementById("ru.averia.tracker:id/container_avatar").click();
-
-                phonePhoto();
-
-                driver.findElement(By.id("ru.averia.tracker:id/crop_image_menu_crop")).click();
-                sleep(5);
-                driver.findElementById("ru.averia.tracker:id/iv_save").click();
+        String Photo = "//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther";
+        logger.info("Scroll down");
+        scrollDown(Photo);
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther").click();
+        phonePhoto();
+        driver.findElementByAccessibilityId("userProfileEditing save").click();
                 sleep(5);
                 logger.info("Saving user profile changes");
-                try {driver.findElementById("ru.averia.tracker:id/iv_save").click();}
+                try {driver.findElementByAccessibilityId("userProfileEditing save").click();}
                 catch (org.openqa.selenium.NoSuchElementException e) {logger.info("Already saved?");}
-                break;
 
         }
 
     }
-    
-}

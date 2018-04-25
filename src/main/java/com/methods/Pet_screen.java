@@ -74,9 +74,7 @@ public class Pet_screen extends Common{
         driver.findElementByAccessibilityId("addPet addPhoto placeholder").click();
 
         phonePhoto();
-        /*stop*/
 
-        //driver.navigate().back();
         driver.findElementByAccessibilityId("next screen button enabled").click();
 
         try {
@@ -89,6 +87,8 @@ public class Pet_screen extends Common{
 
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTextField").sendKeys("овчарка");
         driver.findElementByAccessibilityId("Азиатская овчарка").click();
+        driver.findElementByAccessibilityId("Добавить питомца").click();
+        driver.findElementByAccessibilityId("next screen button enabled").click();
         driver.findElementByAccessibilityId("next screen button enabled").click();
 
         Assert.assertEquals("Возраст", driver.findElementByXPath("//XCUIElementTypeNavigationBar[@name=\"Возраст\"]").getAttribute("name"));
@@ -110,29 +110,6 @@ public class Pet_screen extends Common{
         driver.findElementByAccessibilityId("finalize process enabled").click();
         Assert.assertEquals("Не сейчас", driver.findElementByAccessibilityId("Не сейчас").getText());
         driver.findElementByAccessibilityId("Не сейчас").click();
-        /*driver.findElement(By.id("ru.averia.tracker:id/bt_next")).click();
-
-        Assert.assertEquals("Добавить питомца", driver.findElement(By.id("ru.averia.tracker:id/tv_title")).getText());
-        driver.findElement(By.id("ru.averia.tracker:id/bt_next")).click();
-
-        driver.navigate().back();
-
-        driver.findElement(By.id("ru.averia.tracker:id/bt_next")).click();
-
-        driver.findElement(By.xpath("//*[@text='Австралийская келпи']")).click();
-        driver.findElementById("ru.averia.tracker:id/bt_next").click();
-
-        driver.findElementById("ru.averia.tracker:id/til_age").sendKeys("2");
-        driver.navigate().back();
-        driver.findElementById("ru.averia.tracker:id/bt_next").click();
-
-        driver.findElementById("ru.averia.tracker:id/til_weight").sendKeys("31");
-
-        driver.findElementById("ru.averia.tracker:id/til_height").sendKeys("22");
-
-        driver.navigate().back();
-
-        driver.findElementById("ru.averia.tracker:id/bt_next").click();*/
 
     }
 

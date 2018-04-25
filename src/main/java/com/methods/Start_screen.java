@@ -1,19 +1,17 @@
 package com.methods;
 
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileElement;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import org.apache.log4j.Logger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.PageFactory;
-import org.testng.Assert;
+import io.appium.java_client.*;
+import io.appium.java_client.pagefactory.*;
+import org.apache.log4j.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.*;
+import org.testng.*;
 
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 
 import static com.vars.consts.*;
-import static com.vars.vars.userlogin;
-import static com.vars.vars.userpass;
+import static com.vars.vars.*;
 
 public class Start_screen extends Common{
 
@@ -21,17 +19,17 @@ public class Start_screen extends Common{
 
     public Start_screen(AppiumDriver<MobileElement> driver)  {
         super(driver);
-        logger = Logger.getLogger("AndroidTestLogger");
+        logger = Logger.getLogger("iOSTestLogger");
         PageFactory.initElements(new AppiumFieldDecorator(driver, Timeout, TimeUnit.SECONDS), this);
     }
 
     public void SplashScreen() {
         sleep(5);
-        Assert.assertEquals("Больше никаких потерянных животных", driver.findElement(By.id("ru.averia.tracker:id/about_title_dog_1")).getText());
-        driver.findElement(By.id("ru.averia.tracker:id/bt_next")).click();
-        Assert.assertEquals("Мониторинг активности вашего питомца", driver.findElement(By.id("ru.averia.tracker:id/about_title_dog_2")).getText());
-        driver.findElement(By.id("ru.averia.tracker:id/bt_next")).click();
-        Assert.assertEquals("Социальная сеть для владельцев собак", driver.findElement(By.id("ru.averia.tracker:id/about_title_dog_3")).getText());
+        Assert.assertEquals("Больше никаких потерянных животных", driver.findElementByAccessibilityId("Больше никаких потерянных животных").getText());
+        driver.findElementByAccessibilityId("Далее").click();
+        Assert.assertEquals("Мониторинг активности вашего питомца", driver.findElementByAccessibilityId("Мониторинг активности вашего питомца").getText());
+        driver.findElementByAccessibilityId("Далее").click();
+        Assert.assertEquals("Социальная сеть для владельцев собак", driver.findElementByAccessibilityId("Социальная сеть для владельцев собак").getText());
 
     }
 
@@ -46,29 +44,26 @@ public class Start_screen extends Common{
         for (int i = 0; i < 16; i++) userlogin += login.nextInt(alphabet.length());
         userlogin = userlogin + "@test.user";
 
-        Assert.assertEquals("Регистрация", driver.findElement(By.id("ru.averia.tracker:id/bt_register")).getText());
+        Assert.assertEquals("Регистрация",driver.findElementByAccessibilityId("Регистрация").getText());
 
-        driver.findElement(By.id("ru.averia.tracker:id/bt_register")).click();
+        driver.findElementByAccessibilityId("Регистрация").click();
 
-        //Assert.assertEquals("Регистрация", driver.findElement(By.id("ru.averia.tracker:id/tv_title")).getText());
+        //Assert.assertEquals("Регистрация", driver.findElement(By.id("ru.averia.tracker:id/tv_title")).getText()); - проверка заголовка страницы
 
         sleep(5);
 
-        driver.findElementById("ru.averia.tracker:id/et_email").sendKeys(userlogin);
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeTextField").sendKeys(userlogin);
 
-        driver.findElementById("ru.averia.tracker:id/et_password").sendKeys(userpass);
+        //плохой вариант - селектор меняется в зависимости от auth password secureButton, но других нет
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeSecureTextField").sendKeys(userpass);
 
         logger.info(device + ": Userlogin: " + userlogin);
         logger.info(device + ": Userpass:  " + userpass);
 
-        //driver.navigate().back();
+        driver.findElementByAccessibilityId("Продолжить").click();
 
-        driver.findElement(By.id("ru.averia.tracker:id/bt_register")).click();
-
-        //Allow android actions
-        androidAllowAccess();
-
-        Assert.assertEquals("Добавить", driver.findElementById("ru.averia.tracker:id/bt_add_pet").getText());
+        iOSAllowAccess();
+        Assert.assertEquals("Добавить питомца", driver.findElementByXPath("//XCUIElementTypeStaticText[@name=\"Добавить питомца\"]").getAttribute("name"));
 
         logger.info(device + ": Registration done");
 
@@ -78,21 +73,18 @@ public class Start_screen extends Common{
 
         logger.info(device + ": Logging with just registered user");
 
-        Assert.assertEquals("Войти", driver.findElement(By.id("ru.averia.tracker:id/bt_login")).getText());
-        driver.findElement(By.id("ru.averia.tracker:id/bt_login")).click();
+        Assert.assertEquals("Войти", driver.findElementByAccessibilityId("Войти").getText());
+        driver.findElementByAccessibilityId("Войти").click();
 
-        //Assert.assertEquals("Войти", driver.findElement(By.id("ru.averia.tracker:id/tv_title")).getText());
-        Assert.assertEquals("Войти", driver.findElement(By.id("ru.averia.tracker:id/bt_login")).getText());
+        //Assert.assertEquals("Войти", driver.findElement(By.id("ru.averia.tracker:id/tv_title")).getText()); -- проверка заголовка страницы
+        Assert.assertEquals("Войти", driver.findElementByXPath("//XCUIElementTypeButton[@name=\"Войти\"]").getAttribute("name"));
         sleep(5);
-        driver.findElement(By.id("ru.averia.tracker:id/et_email")).sendKeys(userlogin);
-
-        driver.findElement(By.id("ru.averia.tracker:id/et_password")).sendKeys(userpass);
-        driver.findElementById("ru.averia.tracker:id/bt_login").click();
-
-        androidAllowAccess();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeTextField").sendKeys(userlogin);
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeSecureTextField").sendKeys(userpass);
+        driver.findElementByXPath("//XCUIElementTypeButton[@name=\"Войти\"]").click();
 
         try {
-            Assert.assertEquals("Добавить", driver.findElement(By.id("ru.averia.tracker:id/bt_add_pet")).getText());
+            Assert.assertEquals("Добавить", driver.findElementByAccessibilityId("Добавить питомца").getText());
         }catch (org.openqa.selenium.NoSuchElementException e) {
             logger.info(device + ": No Add Pet button, already added?");
         }
@@ -102,19 +94,14 @@ public class Start_screen extends Common{
 
         logger.info(device + ": Logging with existing user");
 
-        Assert.assertEquals("Войти", driver.findElement(By.id("ru.averia.tracker:id/bt_login")).getText());
-        driver.findElement(By.id("ru.averia.tracker:id/bt_login")).click();
+        Assert.assertEquals("Войти", driver.findElementByAccessibilityId("Войти").getText());
+        driver.findElementByAccessibilityId("Войти").click();
 
-        Assert.assertEquals("Войти", driver.findElement(By.id("ru.averia.tracker:id/bt_login")).getText());
+        Assert.assertEquals("Войти", driver.findElementByXPath("//XCUIElementTypeButton[@name=\"Войти\"]").getAttribute("name"));
         sleep(5);
-        driver.findElement(By.id("ru.averia.tracker:id/et_email")).click();
-        driver.findElement(By.id("ru.averia.tracker:id/et_email")).sendKeys(old_user);
-
-        driver.findElement(By.id("ru.averia.tracker:id/et_password")).click();
-        driver.findElement(By.id("ru.averia.tracker:id/et_password")).sendKeys(old_pass);
-        driver.findElementById("ru.averia.tracker:id/bt_login").click();
-
-        androidAllowAccess();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeTextField").sendKeys(old_user);
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeSecureTextField").sendKeys(old_pass);
+        driver.findElementByXPath("//XCUIElementTypeButton[@name=\"Войти\"]").click();
 
     }
 

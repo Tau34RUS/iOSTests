@@ -102,7 +102,7 @@ public class Methods {
         driver.findElementByAccessibilityId("Продолжить").click();
 
         iOSAllowAccess();
-        Assert.assertEquals("Добавить питомца", driver.findElementByXPath("//XCUIElementTypeStaticText[@name=\"Добавить питомца\"]").getText());
+        Assert.assertEquals("Добавить питомца", driver.findElementByXPath("//XCUIElementTypeStaticText[@name=\"Добавить питомца\"]").getAttribute("name"));
 
         logger.info("Registration done");
 
@@ -112,7 +112,7 @@ public class Methods {
 
         Assert.assertEquals("Войти", driver.findElementByAccessibilityId("Войти").getText());
         driver.findElementByAccessibilityId("Войти").click();
-        Assert.assertEquals("Войти", driver.findElementByXPath("//XCUIElementTypeButton[@name=\"Войти\"]").getText());
+        Assert.assertEquals("Войти", driver.findElementByXPath("//XCUIElementTypeButton[@name=\"Войти\"]").getAttribute("name"));
         WebElement username = driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeTextField");
         username.click();
         username.sendKeys(Variables.userlogin);
@@ -128,7 +128,7 @@ public class Methods {
             Assert.assertEquals("Добавить", driver.findElementByAccessibilityId("Добавить питомца").getText());
         } catch (Exception e) {
             e.getMessage();
-            logger.info("o Add Pet button, already added?");
+            logger.info("No Add Pet button, already added?");
 
         }
     }

@@ -16,26 +16,26 @@ public class Socials extends Common {
 
     public Socials(AppiumDriver<MobileElement> driver)  {
         super(driver);
-        logger = Logger.getLogger("AndroidTestLogger");
+        logger = Logger.getLogger("iOSTestLogger");
         PageFactory.initElements(new AppiumFieldDecorator(driver, Timeout, TimeUnit.SECONDS), this);
     }
 
     public void share_Achievement(String device) {
 
-        swipeUp();
+        scrollUp("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[7]");
 
         logger.info(device + ": Sharing achievement");
 
-        driver.findElementByXPath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/android.view.ViewGroup/android.support.v4.view.ViewPager/android.view.ViewGroup/android.widget.FrameLayout/android.view.ViewGroup/android.widget.ScrollView/android.widget.LinearLayout/android.widget.LinearLayout[2]/android.support.v7.widget.RecyclerView/android.view.ViewGroup[1]").click();
-        driver.findElementById("ru.averia.tracker:id/iv_img").clear();
-        driver.findElementById("ru.averia.tracker:id/bt_share").click();
-        driver.findElementById("com.android.packageinstaller:id/permission_allow_button").click();
-        driver.findElementById("ru.averia.tracker:id/tv_next").click();
-        driver.findElementByXPath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[1]/android.view.ViewGroup[2]/android.widget.Button").click();
-        driver.navigate().back();
-        driver.navigate().back();
-        driver.navigate().back();
-        driver.findElementById("ru.averia.tracker:id/iv_back").click();
+        driver.findElementByAccessibilityId("Добавлен ошейник").click();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeImage[2]").clear();
+        driver.findElementByAccessibilityId("Поделиться").click();
+        iOSAllowAccess();
+        driver.findElementByAccessibilityId("Далее").click();
+        driver.findElementByAccessibilityId("Поделиться").click();
+        driver.findElementByAccessibilityId("Отменить").click();
+        driver.findElementByAccessibilityId("Библиотека").click();
+        driver.findElementByAccessibilityId("addPet close btn").click();
+        driver.findElementByAccessibilityId("addPet close btn").click();
 
     }
 
