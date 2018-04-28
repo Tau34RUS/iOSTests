@@ -1,6 +1,7 @@
 package iOSTests;
 
 import org.apache.log4j.Logger;
+import org.openqa.selenium.interactions.touch.*;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;

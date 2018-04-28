@@ -7,7 +7,7 @@ public class consts {
     public static final String UDID1 = "9c83ec584423c0f55972e2a8024b6bc1337aab97";
     public static final String UDID = "8c370e985c6da7ed969a2ab66127bc5ebb9719e4";
     public static final Integer Timeout = 15;
-    public static final File appath = new File("/Users/averiatester/Desktop/AveriaCollar.ipa");
+    public static final File appath = new File("/Users/vlad/Public/iOS/ru.averia.collars.ipa");
     public static final String ScreenPath = "failure_screen.png";
     public static final String folder_name = "src/main/output/screenshots/";
     public static final String old_user = "averiatester@gmail.com";

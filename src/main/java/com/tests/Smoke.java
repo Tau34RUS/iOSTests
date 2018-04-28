@@ -25,12 +25,12 @@ import static com.vars.consts.*;
 
 public class Smoke {
 
+    private final String phone_udid;
     Logger logger = Logger.getLogger("iOSTestLogger");
 
     String port;
     public String device;
     public String testName;
-
     public Start_screen start;
     public Screenshot screenshot;
     public GetDeviceInfo deviceinfo;
@@ -42,11 +42,13 @@ public class Smoke {
 
     DesiredCapabilities caps = new DesiredCapabilities();
 
-    @Parameters({"server_port","device"})
-    public Smoke(@Optional("4723") String port, @Optional("default") String device)
+    @Parameters({"server_port","device","phone_udid"})
+    public Smoke(@Optional("4723") String port, @Optional("iPhone") String device, @Optional("auto") String phone_udid)
     {
         this.port = port;
         this.device = device;
+        this.phone_udid = phone_udid;
+
     }
 
     public void StartUp()
@@ -54,20 +56,20 @@ public class Smoke {
 
         caps.setCapability("platformName", "iOS");
         caps.setCapability("PlatformVersion", "11.3");
-        caps.setCapability("deviceName", "iPhone 6");
-        caps.setCapability("udid", UDID1);
         caps.setCapability("automationName", "XCUITest");
-        caps.setCapability("app", appath);
         caps.setCapability("showXcodeLog", "true");
         caps.setCapability("XCUITest", "true");
-        //caps.setCapability("bundleId", "com.averia.collar.test");
-
+        caps.setCapability("deviceName", device);
+        caps.setCapability("app", appath);
+        caps.setCapability("udid", phone_udid);
 
         try {
-            driver = new IOSDriver<WebElement>(new URL("http://127.0.0.1:4730/wd/hub"), caps);
-            //Thread.sleep(1000);
+            driver = new IOSDriver<WebElement>(new URL("http://127.0.0.1:"+port+"/wd/hub"), caps);
+
         } catch (MalformedURLException e) {
+
             e.printStackTrace();
+
         }
 
         //Adding all needed methods and utils
