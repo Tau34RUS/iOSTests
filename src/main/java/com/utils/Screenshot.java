@@ -6,6 +6,7 @@ import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
 import java.io.File;
@@ -18,7 +19,7 @@ public class Screenshot extends com.methods.Common {
 
     protected Logger logger;
 
-    public Screenshot(AppiumDriver<MobileElement> driver)
+    public Screenshot(AppiumDriver<WebElement> driver)
     {
         super(driver);
         logger = Logger.getLogger("Screenshot");

@@ -5,11 +5,11 @@ package com.tests;
 import com.methods.*;
 import com.utils.GetDeviceInfo;
 import com.utils.Screenshot;
-import com.vars.consts;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
@@ -18,9 +18,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
+import static com.vars.consts.*;
+
 public class FullBuildTest {
 
-    Logger logger = Logger.getLogger("AndroidTestLogger");
+    Logger logger = Logger.getLogger("iOSTestLogger");
 
     String port;
     public String device;
@@ -34,12 +36,12 @@ public class FullBuildTest {
     public Main_screen main_screen;
     public Pet_screen pet_screen;
     public Socials social;
-    static AppiumDriver<MobileElement> driver;
+    static AppiumDriver<WebElement> driver;
 
     DesiredCapabilities caps = new DesiredCapabilities();
 
     @Parameters({"server_port","device"})
-    public FullBuildTest(@Optional("4731") String port, @Optional("default") String device)
+    public FullBuildTest(@Optional("4723") String port, @Optional("default") String device)
     {
         this.port = port;
         this.device = device;
@@ -50,19 +52,22 @@ public class FullBuildTest {
 
         logger.info(device + ": Starting app");
 
-        caps.setCapability("deviceName", device);
-        caps.setCapability("platformName", "Android");
-        caps.setCapability("appPackage", "ru.averia.tracker");
-        caps.setCapability("appActivity", "ru.averia.tracker.ui.activities.SplashActivity");
-        caps.setCapability("app", consts.app_path_mac);
-        caps.setCapability("udid", consts.phone_lg);
+        //Adding all Caps
+        caps.setCapability("platformName", "iOS");
+        caps.setCapability("PlatformVersion", "11.3");
+        caps.setCapability("deviceName", "iPhone 5s");
+        caps.setCapability("udid", UDID);
+        caps.setCapability("automationName", "XCUITest");
+        caps.setCapability("app", appath);
+        caps.setCapability("showXcodeLog", "true");
+        caps.setCapability("XCUITest", "true");
+        //caps.setCapability("bundleId", "com.averia.collar.test");
 
-        try {
-            driver = new AndroidDriver<MobileElement>(new URL("http://127.0.0.1:" + port + "/wd/hub"), caps);
-            //Thread.sleep(1000);
+        /*раскомментировать? решить вопрос с драйвером try {
+            !!! driver = new IOSDriver<WebElement>(new URL("http://127.0.0.1:4730/wd/hub"), caps);            //Thread.sleep(1000);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        }
+        }*/
 
         //Adding all needed methods and utils
         start = new Start_screen(driver);
@@ -74,7 +79,9 @@ public class FullBuildTest {
         pet_screen = new Pet_screen(driver);
         social = new Socials(driver);
 
-        driver.manage().timeouts().implicitlyWait(consts.Timeout, TimeUnit.SECONDS);
+
+        //All done, start driver
+        driver.manage().timeouts().implicitlyWait(Timeout, TimeUnit.SECONDS);
 
         logger.info(device + ": App launched");
 
@@ -104,7 +111,7 @@ public class FullBuildTest {
 
     @AfterTest
     void AfterSuite() {
-     //   Exit();
+        Exit();
     }
 
     @AfterMethod
@@ -173,6 +180,7 @@ public class FullBuildTest {
             common.ScreensShuffle();
             common.gotoMainScreen(device);
 
+
         }
 
     @Test(dependsOnMethods = "AddPet")
@@ -190,7 +198,7 @@ public class FullBuildTest {
         {
 
             common.gotoProfileScreen(device);
-            profile_screen.userProfileEdit(device);
+            pet_screen.petEdit(device);
 
         }
 
@@ -207,6 +215,14 @@ public class FullBuildTest {
 
         start.SplashScreen();
         start.Login_old(device);
+
+    }
+
+    @Test(dependsOnMethods = "LoginExistingUser")
+    void ChekingStatistic(){
+
+        common.gotoMainScreen(device);
+        main_screen.walkStats(device);
 
     }
 

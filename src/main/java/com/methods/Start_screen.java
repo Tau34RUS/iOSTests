@@ -17,7 +17,7 @@ public class Start_screen extends Common{
 
     protected Logger logger;
 
-    public Start_screen(AppiumDriver<MobileElement> driver)  {
+    public Start_screen(AppiumDriver<WebElement> driver)  {
         super(driver);
         logger = Logger.getLogger("iOSTestLogger");
         PageFactory.initElements(new AppiumFieldDecorator(driver, Timeout, TimeUnit.SECONDS), this);
@@ -102,6 +102,7 @@ public class Start_screen extends Common{
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeTextField").sendKeys(old_user);
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeSecureTextField").sendKeys(old_pass);
         driver.findElementByXPath("//XCUIElementTypeButton[@name=\"Войти\"]").click();
+        iOSAllowAccess();
 
     }
 

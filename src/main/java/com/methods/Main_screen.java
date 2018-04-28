@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.apache.tools.ant.filters.TokenFilter;
 import org.apache.tools.ant.taskdefs.condition.Contains;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
@@ -18,8 +19,7 @@ public class Main_screen extends Common {
 
     protected Logger logger;
 
-    //??проверить
-    public Main_screen(AppiumDriver<MobileElement> driver) {
+    public Main_screen(AppiumDriver<WebElement> driver) {
 
         super(driver);
         logger = Logger.getLogger("iOSTestLogger");
@@ -27,48 +27,51 @@ public class Main_screen extends Common {
     }
 
     public void checkScreen(String device) {
+        String tabBar = "//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar";
+        String navBar = "//XCUIElementTypeApplication[@name=\\\"Averia Collar\\\"]/XCUIElementTypeWindow[3]/XCUIElementTypeStatusBar/XCUIElementTypeOther[2]";
 
         logger.info(device + ": Checking Main screen objects:");
 
         logger.info(device + ": - Top bar elements");
-        driver.findElementByAccessibilityId(petname + " ").clear();
+        //driver.findElementByAccessibilityId(petname + " ").clear();- !!! - change ID
+        driver.findElement(By.xpath("//XCUIElementTypeButton[contains(@name,'%')]")).clear();
 
-        driver.findElementsByPartialLinkText("%");
-
-        //driver.findElementById("ru.averia.tracker:id/tv_date").clear(); - дата на главном экране
-        driver.findElementsByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeButton[2]").clear();
-
-        driver.findElementsByAccessibilityId("pets days next").clear();
-        driver.findElementsByAccessibilityId("pets days next").clear();
-        driver.findElementsByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]");
-
-        logger.info(device + ": - Stats");
-        driver.findElementByAccessibilityId("Шаг").click();
-        driver.findElementsByXPath("//XCUIElementTypeOther[@name=\"Ходьба\"]").clear();
-        driver.findElementByAccessibilityId(petname).click();
-        driver.findElementByAccessibilityId("Бег").click();
-        driver.findElementsByXPath("//XCUIElementTypeOther[@name=\"Бег и быстрый бег\"]").clear();
-        driver.findElementByAccessibilityId(petname).click();
-        driver.findElementByAccessibilityId("Отдых").click();
-        driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Отдых\"]").clear();
-        driver.findElementByAccessibilityId(petname).click();
-        driver.findElementByAccessibilityId("Расход калорий").click();
-        driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Расход калорий\"]").clear();
-        driver.findElementByAccessibilityId(petname).click();
+        // - date on main screen: open date picker >> close >> previouse date >> naxt date
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeButton[2]").click();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeButton[2]").click();
+        driver.findElementByAccessibilityId("pets days previous").click();
+        driver.findElementByAccessibilityId("pets days next").click();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]").clear();//status
 
         logger.info(device + ": - Tracks and Achievements");
-        swipeUp();
-        //alternative
-        // scrollUp("//XCUIElementTypeApplication[@name=\\\"Averia Collar\\\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[6]");
-        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[6]").click(); //Недавние прогулки
+        
+        scrollUp("//XCUIElementTypeStaticText[@name=\"Недавние прогулки\"]");
+        //swipeUp();
+        driver.findElementByXPath("//XCUIElementTypeStaticText[@name=\"Недавние прогулки\"]").click(); //Недавние прогулки
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]").click();//первый трек
         driver.findElementByAccessibilityId("Все прогулки").click();
-        driver.findElementByAccessibilityId(petname).click();
-        //может потребоваться доп.скролл - не видит элемент
-        driver.findElementByAccessibilityId("Добавлен ошейник").click();
+        driver.navigate().back();
 
+        scrollUp(tabBar);
+
+        driver.findElementByAccessibilityId("Добавлен ошейник").click();
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeImage[2]").clear();//картинка
         driver.findElementByAccessibilityId("addPet close btn").click();
+
+        logger.info(device + ": - Stats");
+        scrollDown(navBar);
+        driver.findElementByAccessibilityId("Шаг").click();
+        driver.findElementsByXPath("//XCUIElementTypeOther[@name=\"Ходьба\"]").clear();
+        driver.navigate().back();
+        driver.findElementByAccessibilityId("Бег").click();
+        driver.findElementsByXPath("//XCUIElementTypeOther[@name=\"Бег и быстрый бег\"]").clear();
+        driver.navigate().back();
+        driver.findElementByAccessibilityId("Отдых").click();
+        driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Отдых\"]").clear();
+        driver.navigate().back();
+        driver.findElementByAccessibilityId("Расход калорий").click();
+        driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Расход калорий\"]").clear();
+        driver.navigate().back();
 
     }
 

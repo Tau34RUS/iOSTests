@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
 import java.util.concurrent.TimeUnit;
@@ -15,7 +16,7 @@ public class Map_screen extends Common {
     protected Logger logger;
 
     //проверить
-    public Map_screen(AppiumDriver<MobileElement> driver)  {
+    public Map_screen(AppiumDriver<WebElement> driver)  {
         super(driver);
         logger = Logger.getLogger("iOSTestLogger");
         PageFactory.initElements(new AppiumFieldDecorator(driver, Timeout, TimeUnit.SECONDS), this);

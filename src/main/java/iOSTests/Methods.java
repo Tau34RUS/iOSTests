@@ -1,6 +1,5 @@
 package iOSTests;
 
-import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import org.apache.commons.io.FileUtils;
 import io.appium.java_client.AppiumDriver;

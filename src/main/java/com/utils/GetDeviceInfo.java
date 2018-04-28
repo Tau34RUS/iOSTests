@@ -1,23 +1,23 @@
 package com.utils;
 
-import com.methods.Common;
-import com.vars.vars;
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileElement;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import org.apache.log4j.Logger;
-import org.openqa.selenium.support.PageFactory;
+import com.methods.*;
+import com.vars.*;
+import io.appium.java_client.*;
+import io.appium.java_client.pagefactory.*;
+import org.apache.log4j.*;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.*;
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class GetDeviceInfo extends Common {
 
     protected Logger logger;
 
-    public GetDeviceInfo(AppiumDriver<MobileElement> driver)
+    public GetDeviceInfo(AppiumDriver<WebElement> driver)
     {
         super(driver);
-        logger = Logger.getLogger("Screenshot");
+        logger = Logger.getLogger("DeviceInfo");
         PageFactory.initElements(new AppiumFieldDecorator(driver, com.vars.consts.Timeout, TimeUnit.SECONDS), this);
     }
 

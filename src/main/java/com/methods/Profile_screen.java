@@ -5,6 +5,7 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
 import java.util.Random;
@@ -19,7 +20,7 @@ public class Profile_screen extends Common {
 
     protected Logger logger;
 
-    public Profile_screen(AppiumDriver<MobileElement> driver)  {
+    public Profile_screen(AppiumDriver<WebElement> driver)  {
         super(driver);
         logger = Logger.getLogger("iOSTestLogger");
         PageFactory.initElements(new AppiumFieldDecorator(driver, Timeout, TimeUnit.SECONDS), this);

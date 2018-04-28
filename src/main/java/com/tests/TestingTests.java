@@ -2,15 +2,13 @@ package com.tests;
 
 /* Smoke Tests */
 
-import com.methods.Common;
-import com.methods.Main_screen;
-import com.methods.Profile_screen;
-import com.methods.Start_screen;
+import com.methods.*;
 import com.utils.GetDeviceInfo;
 import com.utils.Screenshot;
 import com.vars.consts;
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.ios.IOSDriver;
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.AndroidDriver;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -23,9 +21,9 @@ import java.util.concurrent.TimeUnit;
 
 import static com.vars.consts.*;
 
-public class Smoke {
+public class TestingTests {
 
-    Logger logger = Logger.getLogger("iOSTestLogger");
+    Logger logger = Logger.getLogger("AndroidTestLogger");
 
     String port;
     public String device;
@@ -37,13 +35,14 @@ public class Smoke {
     public Common common;
     public Profile_screen profile_screen;
     public Main_screen main_screen;
-
+    public Pet_screen pet_screen;
+    public Socials social;
     static AppiumDriver<WebElement> driver;
 
     DesiredCapabilities caps = new DesiredCapabilities();
 
     @Parameters({"server_port","device"})
-    public Smoke(@Optional("4723") String port, @Optional("default") String device)
+    public TestingTests(@Optional("4723") String port, @Optional("default") String device)
     {
         this.port = port;
         this.device = device;
@@ -52,19 +51,20 @@ public class Smoke {
     public void StartUp()
     {
 
+        logger.info(device + ": Starting app");
+
         caps.setCapability("platformName", "iOS");
         caps.setCapability("PlatformVersion", "11.3");
-        caps.setCapability("deviceName", "iPhone 6");
-        caps.setCapability("udid", UDID1);
+        caps.setCapability("deviceName", "iPhone 5s");
+        caps.setCapability("udid", UDID);
         caps.setCapability("automationName", "XCUITest");
         caps.setCapability("app", appath);
         caps.setCapability("showXcodeLog", "true");
         caps.setCapability("XCUITest", "true");
         //caps.setCapability("bundleId", "com.averia.collar.test");
 
-
         try {
-            driver = new IOSDriver<WebElement>(new URL("http://127.0.0.1:4730/wd/hub"), caps);
+            driver = new AndroidDriver<WebElement>(new URL("http://127.0.0.1:" + port + "/wd/hub"), caps);
             //Thread.sleep(1000);
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -77,13 +77,18 @@ public class Smoke {
         common = new Common(driver);
         profile_screen = new Profile_screen(driver);
         main_screen = new Main_screen(driver);
+        pet_screen = new Pet_screen(driver);
+        social = new Socials(driver);
 
         driver.manage().timeouts().implicitlyWait(consts.Timeout, TimeUnit.SECONDS);
+
+        logger.info(device + ": App launched");
 
     }
 
     public void Exit() {
 
+        logger.info(device + ": Closing app");
         driver.quit();
 
     }
@@ -140,37 +145,93 @@ public class Smoke {
     }
 
     @Test
-    void Login()
-    {
+        void Register()
+        {
+
+            start.SplashScreen();
+            start.Register(device);
+
+
+        }
+/*    @Test(dependsOnMethods = "Register")
+        void Login()
+        {
+            Exit();
+            StartUp();
+            start.SplashScreen();
+            start.Login(device);
+
+        }*/
+    @Test(dependsOnMethods = "Register")
+        void AddPet()
+        {
+
+            pet_screen.addPet(device);
+            common.gotoProfileScreen(device);
+            pet_screen.petEdit(device);
+
+        }
+/*
+    @Test(dependsOnMethods = "AddPet")
+        void MainActivity()
+        {
+
+            common.ScreensShuffle();
+            common.gotoMainScreen(device);
+
+
+        }
+
+    @Test(dependsOnMethods = "AddPet")
+        void UserProfile()
+        {
+
+            common.gotoProfileScreen(device);
+            profile_screen.userProfileEdit(device);
+            common.gotoMainScreen(device);
+
+        }
+
+    @Test(dependsOnMethods = "UserProfile")
+        void PetProfile()
+        {
+
+            common.gotoProfileScreen(device);
+            pet_screen.petEdit(device);
+
+        }
+
+    @Test(dependsOnMethods = "PetProfile")
+        void Restart(){
+
+            Exit();
+            StartUp();
+
+        }
+
+    @Test(dependsOnMethods = "Restart")
+    void LoginExistingUser(){
 
         start.SplashScreen();
         start.Login_old(device);
 
     }
 
-    @Test(dependsOnMethods = "Login")
-    void MainActivity()
-    {
-
-        common.ScreensShuffle();
-
-    }
-
-    @Test(dependsOnMethods = "MainActivity")
-    void ProfileScreenElements()
-    {
-
-        common.gotoProfileScreen(device);
-        profile_screen.userProfileView(device);
-
-    }
-
-    @Test(dependsOnMethods = "Login")
-    void MainScreenElements()
-    {
+    @Test(dependsOnMethods = "LoginExistingUser")
+    void ChekingStatistic(){
 
         common.gotoMainScreen(device);
-        main_screen.checkScreen(device);
+        main_screen.walkStats(device);
+
     }
+
+
+    @Test(dependsOnMethods = "LoginExistingUser")
+    void Achievements(){
+
+        common.gotoMainScreen(device);
+        social.share_Achievement(device);
+
+    } */
 
 }

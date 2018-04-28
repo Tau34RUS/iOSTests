@@ -7,27 +7,26 @@ import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 
 import java.util.HashMap;
 import java.util.List;
 
 import static com.vars.consts.*;
 import static com.vars.vars.devicename;
+import static com.vars.vars.petname;
 import static com.vars.vars.screensize;
 
 public class Common {
 
-    //??
     public AppiumDriver driver;
 
     Logger logger = Logger.getLogger(Common.class);
 
-    public Common(AppiumDriver<MobileElement> driver) {
+    public Common(AppiumDriver<WebElement> driver) {
         this.driver = driver;
     }
-    //??
 
-    //public void androidAllowAccess()
     public void iOSAllowAccess() {
         try {
             driver.findElementByAccessibilityId("Разрешить").click();
@@ -36,7 +35,6 @@ public class Common {
         }
     }
 
-    //public void sleep (Integer seconds)
     public void sleep (Integer seconds) {
 
         try {
@@ -47,7 +45,6 @@ public class Common {
 
     }
 
-    //public void swipeUp()
     public void swipeUp() {
 
         logger.info("Swipe Up");
@@ -60,7 +57,6 @@ public class Common {
 
     }
 
-    //public void swipeDown()
     public void swipeDown() {
 
         logger.info("Swipe Down");
@@ -73,48 +69,45 @@ public class Common {
 
     }
 
-    //public void gotoMainScreen(String device)
     public void gotoMainScreen(String device) {
 
         logger.info(device + ": GOTO Main Screen");
-        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]").click();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[1]").click();
 
     }
 
-    //public void gotoMapScreen(String device)
     public void gotoMapScreen(String device) {
 
         logger.info(device + ": GOTO Map Screen");
-        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]").click();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[2]").click();
 
     }
 
-    //public void gotoProfileScreen(String device)
     public void gotoProfileScreen(String device) {
 
         logger.info(device + ": GOTO Profile Screen");
-        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[3]").click();
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[3]").click();
 
     }
 
-    //public void ScreensShuffle()
     public void ScreensShuffle() {
 
-        for(int i=0; i<2; i++) {
-            driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]").click();
+        String tabBar = "//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar";
+        String navBar = "//XCUIElementTypeApplication[@name=\\\"Averia Collar\\\"]/XCUIElementTypeWindow[3]/XCUIElementTypeStatusBar/XCUIElementTypeOther[2]";
+
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[2]").click();
+        iOSAllowAccess();
+        sleep(1);
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[3]").click();
             sleep(1);
-            driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[3]").click();
+            scrollUp(tabBar);
+            scrollDown(navBar);
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[1]").click();
             sleep(1);
-            swipeUp();
-            swipeDown();
-            driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]").click();
-            sleep(1);
-            swipeUp();
-            swipeDown();
-        }
+            scrollUp(tabBar);
+            scrollDown(navBar);
     }
 
-    //public void phonePhoto()
     public void phonePhoto () {
         driver.findElementByAccessibilityId("Сфотографировать").click();
         iOSAllowAccess();
@@ -143,7 +136,6 @@ public class Common {
 
     }
 
-    //swipeUpToElementId alternative
     public void scrollUp(String elementXpath){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         HashMap scrollObject = new HashMap();
@@ -152,7 +144,6 @@ public class Common {
         js.executeScript("mobile: swipe", scrollObject);
     }
 
-    //swipeDownToElementId alternative
     public void scrollDown(String elementXpath){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         HashMap scrollObject = new HashMap();

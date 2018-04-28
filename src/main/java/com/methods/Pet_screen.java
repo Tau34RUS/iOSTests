@@ -22,7 +22,7 @@ public class Pet_screen extends Common{
     protected Logger logger;
 
     //проверить
-    public Pet_screen(AppiumDriver<MobileElement> driver)  {
+    public Pet_screen(AppiumDriver<WebElement> driver)  {
         super(driver);
         logger = Logger.getLogger("AndroidTestLogger");
         PageFactory.initElements(new AppiumFieldDecorator(driver, Timeout, TimeUnit.SECONDS), this);
