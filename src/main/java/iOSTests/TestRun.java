@@ -73,18 +73,19 @@ public class TestRun {
 
     }
 
-    @Test(dependsOnMethods = "iOSTestLogin")
+    @Test(dependsOnMethods = "iOSTestLogin", priority = 1)
+    public void iOSTestScreens() throws Exception {
+
+        App.CheckScreens();
+
+    }
+
+    @Test(dependsOnMethods = "iOSTestLogin", priority = 2)
     public void iOSTestAddPet() throws Exception {
 
         App.AddPet();
 
     }
 
-    @Test(dependsOnMethods = "iOSTestLogin")
-    public void iOSTestScreens() throws Exception {
-
-        App.CheckScreens();
-
-    }
 
 }
