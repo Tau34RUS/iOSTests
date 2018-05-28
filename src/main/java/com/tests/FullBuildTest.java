@@ -6,7 +6,6 @@ import com.methods.*;
 import com.utils.GetDeviceInfo;
 import com.utils.Screenshot;
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileElement;
 import io.appium.java_client.ios.IOSDriver;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebElement;
@@ -17,11 +16,11 @@ import org.testng.annotations.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
-
 import static com.vars.consts.*;
 
 public class FullBuildTest {
 
+    private final String phone_udid;
     Logger logger = Logger.getLogger("iOSTestLogger");
 
     String port;
@@ -36,38 +35,41 @@ public class FullBuildTest {
     public Main_screen main_screen;
     public Pet_screen pet_screen;
     public Socials social;
+    public Map_screen map_screen;
     static AppiumDriver<WebElement> driver;
 
     DesiredCapabilities caps = new DesiredCapabilities();
 
-    @Parameters({"server_port","device"})
-    public FullBuildTest(@Optional("4723") String port, @Optional("default") String device)
+    @Parameters({"server_port","device","phone_udid"})
+    public FullBuildTest(@Optional("4723") String port, @Optional("iPhone") String device, @Optional("auto") String phone_udid)
     {
         this.port = port;
         this.device = device;
+        this.phone_udid = phone_udid;
     }
 
     public void StartUp()
     {
-
         logger.info(device + ": Starting app");
 
         //Adding all Caps
         caps.setCapability("platformName", "iOS");
         caps.setCapability("PlatformVersion", "11.3");
-        caps.setCapability("deviceName", "iPhone 5s");
-        caps.setCapability("udid", UDID);
         caps.setCapability("automationName", "XCUITest");
-        caps.setCapability("app", appath);
         caps.setCapability("showXcodeLog", "true");
         caps.setCapability("XCUITest", "true");
-        //caps.setCapability("bundleId", "com.averia.collar.test");
+        caps.setCapability("deviceName", device);
+        caps.setCapability("app", appath);
+        caps.setCapability("udid", phone_udid);
 
-        /*раскомментировать? решить вопрос с драйвером try {
-            !!! driver = new IOSDriver<WebElement>(new URL("http://127.0.0.1:4730/wd/hub"), caps);            //Thread.sleep(1000);
+       // caps.setCapability("noReset", true);
+       // caps.setCapability("fullReset", false);
+
+        try {
+            driver = new IOSDriver<WebElement>(new URL("http://127.0.0.1:"+port+"/wd/hub"), caps);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        }*/
+        }
 
         //Adding all needed methods and utils
         start = new Start_screen(driver);
@@ -77,8 +79,8 @@ public class FullBuildTest {
         profile_screen = new Profile_screen(driver);
         main_screen = new Main_screen(driver);
         pet_screen = new Pet_screen(driver);
+        map_screen = new Map_screen(driver);
         social = new Socials(driver);
-
 
         //All done, start driver
         driver.manage().timeouts().implicitlyWait(Timeout, TimeUnit.SECONDS);
@@ -88,21 +90,17 @@ public class FullBuildTest {
     }
 
     public void Exit() {
-
         logger.info(device + ": Closing app");
         driver.quit();
-
     }
 
     @BeforeTest(alwaysRun = true)
     void BeforeSuite()
     {
-
         logger.info("-----");
         logger.info(device+": "+"Initial Settings and App Startup");
 
         StartUp();
-
         logger.info(device+": "+"Settings Applied");
 
         deviceinfo.getDeviceInfo(device);
@@ -142,18 +140,15 @@ public class FullBuildTest {
         {
             e.printStackTrace();
         }
-
     }
 
     @Test
         void Register()
         {
-
             start.SplashScreen();
             start.Register(device);
-
-
         }
+
     @Test(dependsOnMethods = "Register")
         void Login()
         {
@@ -161,78 +156,82 @@ public class FullBuildTest {
             StartUp();
             start.SplashScreen();
             start.Login(device);
-
         }
+
     @Test(dependsOnMethods = "Login")
         void AddPet()
         {
-
             pet_screen.addPet(device);
             common.gotoProfileScreen(device);
             pet_screen.petEdit(device);
-
         }
 
     @Test(dependsOnMethods = "AddPet")
         void MainActivity()
         {
-
             common.ScreensShuffle();
             common.gotoMainScreen(device);
-
-
         }
 
     @Test(dependsOnMethods = "AddPet")
         void UserProfile()
         {
-
             common.gotoProfileScreen(device);
             profile_screen.userProfileEdit(device);
             common.gotoMainScreen(device);
-
         }
 
     @Test(dependsOnMethods = "UserProfile")
         void PetProfile()
         {
-
             common.gotoProfileScreen(device);
             pet_screen.petEdit(device);
-
         }
 
-    @Test(dependsOnMethods = "PetProfile")
-        void Restart(){
+        @Test(dependsOnMethods = "UserProfile")
+        void AddDeletePet() {
+            common.gotoProfileScreen(device);
+            pet_screen.addPetProfileScreen(device);
+            pet_screen.deletePetProfileScreen(device);
+        }
 
+    @Test(dependsOnMethods = "AddDeletePet")
+        void Restart()
+    {
             Exit();
             StartUp();
-
         }
 
     @Test(dependsOnMethods = "Restart")
-    void LoginExistingUser(){
-
+    void LoginExistingUser()
+    {
         start.SplashScreen();
         start.Login_old(device);
-
     }
 
     @Test(dependsOnMethods = "LoginExistingUser")
-    void ChekingStatistic(){
-
+    void ChekingStatistic()
+    {
         common.gotoMainScreen(device);
         main_screen.walkStats(device);
-
     }
 
 
     @Test(dependsOnMethods = "LoginExistingUser")
-    void Achievements(){
-
+    void Achievements()
+    {
         common.gotoMainScreen(device);
         social.share_Achievement(device);
+    }
 
+    @Test(dependsOnMethods = "LoginExistingUser")
+    void SafeZone(){
+
+        common.gotoMapScreen(device);
+        String currentPetName = driver.findElementByXPath("//*[@type='XCUIElementTypeNavigationBar']").getAttribute("name");
+        common.gotoProfileScreen(device);
+        common.swipeUp();
+        map_screen.addSafeZone(device, currentPetName);
     }
 
 }

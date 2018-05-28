@@ -48,8 +48,6 @@ public class Start_screen extends Common{
 
         driver.findElementByAccessibilityId("Регистрация").click();
 
-        //Assert.assertEquals("Регистрация", driver.findElement(By.id("ru.averia.tracker:id/tv_title")).getText()); - проверка заголовка страницы
-
         sleep(5);
 
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeTextField").sendKeys(userlogin);
@@ -76,18 +74,22 @@ public class Start_screen extends Common{
         Assert.assertEquals("Войти", driver.findElementByAccessibilityId("Войти").getText());
         driver.findElementByAccessibilityId("Войти").click();
 
-        //Assert.assertEquals("Войти", driver.findElement(By.id("ru.averia.tracker:id/tv_title")).getText()); -- проверка заголовка страницы
         Assert.assertEquals("Войти", driver.findElementByXPath("//XCUIElementTypeButton[@name=\"Войти\"]").getAttribute("name"));
         sleep(5);
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeTextField").sendKeys(userlogin);
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeSecureTextField").sendKeys(userpass);
         driver.findElementByXPath("//XCUIElementTypeButton[@name=\"Войти\"]").click();
 
+        iOSAllowAccess();
+
         try {
-            Assert.assertEquals("Добавить", driver.findElementByAccessibilityId("Добавить питомца").getText());
+            Assert.assertEquals("Добавить питомца", driver.findElementByAccessibilityId("Добавить питомца").getText());
         }catch (org.openqa.selenium.NoSuchElementException e) {
             logger.info(device + ": No Add Pet button, already added?");
         }
+
+            driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[3]").clear();
+
     }
 
     public void Login_old(String device) {
@@ -103,6 +105,8 @@ public class Start_screen extends Common{
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeSecureTextField").sendKeys(old_pass);
         driver.findElementByXPath("//XCUIElementTypeButton[@name=\"Войти\"]").click();
         iOSAllowAccess();
+
+        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[3]").clear();
 
     }
 

@@ -9,6 +9,7 @@ import com.vars.consts;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -22,8 +23,8 @@ import java.util.concurrent.TimeUnit;
 import static com.vars.consts.*;
 
 public class TestingTests {
-
-    Logger logger = Logger.getLogger("AndroidTestLogger");
+    private final String phone_udid;
+    Logger logger = Logger.getLogger("iOSTestLogger");
 
     String port;
     public String device;
@@ -37,15 +38,17 @@ public class TestingTests {
     public Main_screen main_screen;
     public Pet_screen pet_screen;
     public Socials social;
+    public Map_screen map_screen;
     static AppiumDriver<WebElement> driver;
 
     DesiredCapabilities caps = new DesiredCapabilities();
 
-    @Parameters({"server_port","device"})
-    public TestingTests(@Optional("4723") String port, @Optional("default") String device)
+    @Parameters({"server_port","device","phone_udid"})
+    public TestingTests(@Optional("4723") String port, @Optional("iPhone") String device, @Optional("auto") String phone_udid)
     {
         this.port = port;
         this.device = device;
+        this.phone_udid = phone_udid;
     }
 
     public void StartUp()
@@ -53,19 +56,18 @@ public class TestingTests {
 
         logger.info(device + ": Starting app");
 
+        //Adding all Caps
         caps.setCapability("platformName", "iOS");
         caps.setCapability("PlatformVersion", "11.3");
-        caps.setCapability("deviceName", "iPhone 5s");
-        caps.setCapability("udid", UDID);
         caps.setCapability("automationName", "XCUITest");
-        caps.setCapability("app", appath);
         caps.setCapability("showXcodeLog", "true");
         caps.setCapability("XCUITest", "true");
-        //caps.setCapability("bundleId", "com.averia.collar.test");
+        caps.setCapability("deviceName", device);
+        caps.setCapability("app", appath);
+        caps.setCapability("udid", phone_udid);
 
         try {
-            driver = new AndroidDriver<WebElement>(new URL("http://127.0.0.1:" + port + "/wd/hub"), caps);
-            //Thread.sleep(1000);
+            driver = new IOSDriver<WebElement>(new URL("http://127.0.0.1:"+port+"/wd/hub"), caps);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -78,9 +80,11 @@ public class TestingTests {
         profile_screen = new Profile_screen(driver);
         main_screen = new Main_screen(driver);
         pet_screen = new Pet_screen(driver);
+        map_screen = new Map_screen(driver);
         social = new Socials(driver);
 
-        driver.manage().timeouts().implicitlyWait(consts.Timeout, TimeUnit.SECONDS);
+        //All done, start driver
+        driver.manage().timeouts().implicitlyWait(Timeout, TimeUnit.SECONDS);
 
         logger.info(device + ": App launched");
 
@@ -145,14 +149,11 @@ public class TestingTests {
     }
 
     @Test
-        void Register()
-        {
-
-            start.SplashScreen();
-            start.Register(device);
-
-
-        }
+    void LoginExistingUser()
+    {
+        start.SplashScreen();
+        start.Login_old(device);
+    }
 /*    @Test(dependsOnMethods = "Register")
         void Login()
         {
@@ -162,15 +163,15 @@ public class TestingTests {
             start.Login(device);
 
         }*/
-    @Test(dependsOnMethods = "Register")
-        void AddPet()
-        {
+    @Test(dependsOnMethods = "LoginExistingUser")
+    void SafeZone(){
 
-            pet_screen.addPet(device);
-            common.gotoProfileScreen(device);
-            pet_screen.petEdit(device);
-
-        }
+        common.gotoMapScreen(device);
+        String currentPetName = driver.findElementByXPath("//*[@type='XCUIElementTypeNavigationBar']").getAttribute("name");
+        common.gotoProfileScreen(device);
+        common.swipeUp();
+        map_screen.addSafeZone(device, currentPetName);
+    }
 /*
     @Test(dependsOnMethods = "AddPet")
         void MainActivity()

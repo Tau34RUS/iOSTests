@@ -55,11 +55,8 @@ public class Profile_screen extends Common {
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther").click();
         phonePhoto();
         driver.findElementByAccessibilityId("userProfileEditing save").click();
-                sleep(5);
+                sleep(7);
                 logger.info("Saving user profile changes");
-                try {driver.findElementByAccessibilityId("userProfileEditing save").click();}
-                catch (org.openqa.selenium.NoSuchElementException e) {logger.info("Already saved?");}
-
         }
 
     }

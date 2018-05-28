@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/iOSAutotests.iml" filepath="$PROJECT_DIR$/iOSAutotests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iOSAutotests.iml" filepath="$PROJECT_DIR$/iOSAutotests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iOSAutotests (1).iml" filepath="$PROJECT_DIR$/iOSAutotests (1).iml" />
       <module fileurl="file://$PROJECT_DIR$/iOSAutotests (2).iml" filepath="$PROJECT_DIR$/iOSAutotests (2).iml" />
       <module fileurl="file://$PROJECT_DIR$/iOSTests.iml" filepath="$PROJECT_DIR$/iOSTests.iml" />
     </modules>
