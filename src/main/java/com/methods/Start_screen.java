@@ -24,7 +24,8 @@ public class Start_screen extends Common{
     }
 
     public void SplashScreen() {
-        sleep(5);
+
+        elementVisibilityWait(By.id("Больше никаких потерянных животных"));
         Assert.assertEquals("Больше никаких потерянных животных", driver.findElementByAccessibilityId("Больше никаких потерянных животных").getText());
         driver.findElementByAccessibilityId("Далее").click();
         Assert.assertEquals("Мониторинг активности вашего питомца", driver.findElementByAccessibilityId("Мониторинг активности вашего питомца").getText());
@@ -48,7 +49,7 @@ public class Start_screen extends Common{
 
         driver.findElementByAccessibilityId("Регистрация").click();
 
-        sleep(5);
+        elementPresenceWait(By.id("Продолжить"));
 
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeTextField").sendKeys(userlogin);
 
@@ -75,7 +76,8 @@ public class Start_screen extends Common{
         driver.findElementByAccessibilityId("Войти").click();
 
         Assert.assertEquals("Войти", driver.findElementByXPath("//XCUIElementTypeButton[@name=\"Войти\"]").getAttribute("name"));
-        sleep(5);
+
+        elementPresenceWait(By.xpath("//XCUIElementTypeButton[@name=\"Войти\"]"));
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeTextField").sendKeys(userlogin);
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeSecureTextField").sendKeys(userpass);
         driver.findElementByXPath("//XCUIElementTypeButton[@name=\"Войти\"]").click();
@@ -100,7 +102,8 @@ public class Start_screen extends Common{
         driver.findElementByAccessibilityId("Войти").click();
 
         Assert.assertEquals("Войти", driver.findElementByXPath("//XCUIElementTypeButton[@name=\"Войти\"]").getAttribute("name"));
-        sleep(5);
+
+        elementPresenceWait(By.xpath("//XCUIElementTypeButton[@name=\"Войти\"]"));
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeTextField").sendKeys(old_user);
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeSecureTextField").sendKeys(old_pass);
         driver.findElementByXPath("//XCUIElementTypeButton[@name=\"Войти\"]").click();

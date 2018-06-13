@@ -6,6 +6,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.HashMap;
 
@@ -156,6 +158,16 @@ public class Common {
         } catch (NoSuchElementException e){
             return false;
         }
+    }
+
+    public void elementPresenceWait(By by){
+        WebDriverWait wait = new WebDriverWait(driver,30);
+        wait.until(ExpectedConditions.presenceOfElementLocated(by));
+    }
+
+    public void elementVisibilityWait(By by){
+        WebDriverWait wait = new WebDriverWait(driver,30);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(by));
     }
 
 }

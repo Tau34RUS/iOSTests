@@ -80,7 +80,9 @@ public class Pet_screen extends Common{
         }
 
         driver.findElementByXPath("//*[@type='XCUIElementTypeTextField']").sendKeys("овчарка");
+
         sleep(5);
+
         driver.findElementByAccessibilityId("Азиатская овчарка").click();
 
         driver.findElementByAccessibilityId("next screen button enabled").click();
@@ -119,7 +121,7 @@ public class Pet_screen extends Common{
         if (isElementPresent(By.id(temp_petname))) {
 
             logger.error(device + ": Temp Pet already present!");
-            
+
             driver.findElementByAccessibilityId(temp_petname).click();
 
             scrollUp("Удалить питомца");
@@ -127,7 +129,9 @@ public class Pet_screen extends Common{
             driver.findElementByAccessibilityId("Удалиь питомца").click();
 
             driver.findElementByAccessibilityId("Удалить").click();
-            sleep (5);
+
+            elementVisibilityWait(By.id("Добавить питомца"));
+          
         }
 
 
@@ -162,7 +166,8 @@ public class Pet_screen extends Common{
         petheight.sendKeys(vars.petheight);
 
         driver.findElementByAccessibilityId("finalize process enabled").click();
-        sleep(7);
+
+        elementVisibilityWait(By.id(temp_petname));
 
         if (isElementPresent(By.id(temp_petname))) { logger.error(device + ": Temp Pet Added!"); }
 
@@ -178,7 +183,9 @@ public class Pet_screen extends Common{
         scrollUp("Удалить питомца");
         driver.findElementByAccessibilityId("Удалить питомца").click();
         driver.findElementByAccessibilityId("Да").click();
-        sleep (5);
+
+        elementVisibilityWait(By.id("Добавить питомца"));
+
         if (isElementPresent(By.id(temp_petname))) { logger.error(device + ": Temp Pet Still Present!"); }
 
     }

@@ -55,8 +55,10 @@ public class Profile_screen extends Common {
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther").click();
         phonePhoto();
         driver.findElementByAccessibilityId("userProfileEditing save").click();
-                sleep(7);
-                logger.info("Saving user profile changes");
+
+        elementVisibilityWait(By.id("Редактировать профиль"));
+
+        logger.info("Saving user profile changes");
         }
 
     }

@@ -87,7 +87,8 @@ public class Main_screen extends Common {
         logger.info(device + ": Checking Main screen stats");
         swipeDown();
         driver.findElementByAccessibilityId("Шаг").click();
-        sleep(5);
+
+        elementVisibilityWait(By.xpath("//XCUIElementTypeOther[@name=\"Ходьба\"]"));
         Assert.assertEquals("Ходьба", driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Ходьба\"]").getAttribute("name"));
         if (isElementPresent(By.id("Активности за сегодня нет"))) {
             logger.info("No stats");
@@ -98,7 +99,8 @@ public class Main_screen extends Common {
         driver.findElementByAccessibilityId(currentPetName).click();
 
         driver.findElementByAccessibilityId("Бег").click();
-        sleep(5);
+
+        elementVisibilityWait(By.xpath("//XCUIElementTypeOther[@name=\"Бег и быстрый бег\"]"));
         Assert.assertEquals("Бег и быстрый бег", driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Бег и быстрый бег\"]").getAttribute("name"));
         if (isElementPresent(By.id("Активности за сегодня нет"))) {
             logger.info("No stats");
@@ -109,7 +111,8 @@ public class Main_screen extends Common {
         driver.findElementByAccessibilityId(currentPetName).click();
 
         driver.findElementByAccessibilityId("Отдых").click();
-        sleep(5);
+
+        elementVisibilityWait(By.xpath("//XCUIElementTypeOther[@name=\"Отдых\"]"));
         Assert.assertEquals("Отдых", driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Отдых\"]").getAttribute("name"));
         if (isElementPresent(By.id("Активности за сегодня нет"))) {
             logger.info("No stats");
@@ -120,7 +123,8 @@ public class Main_screen extends Common {
         driver.findElementByAccessibilityId(currentPetName).click();
 
         driver.findElementByAccessibilityId("Расход калорий").click();
-        sleep(5);
+
+        elementVisibilityWait(By.xpath("//XCUIElementTypeOther[@name=\"Расход калорий\"]"));
         Assert.assertEquals("Расход калорий", driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Расход калорий\"]").getAttribute("name"));
         if (isElementPresent(By.id("Активности за сегодня нет"))) {
             logger.info("No stats");
