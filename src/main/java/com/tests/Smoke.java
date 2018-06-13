@@ -51,7 +51,7 @@ public class Smoke {
 
     }
 
-    public void StartUp()
+    private void StartUp()
     {
 
         caps.setCapability("platformName", "iOS");
@@ -59,6 +59,7 @@ public class Smoke {
         caps.setCapability("automationName", "XCUITest");
         caps.setCapability("showXcodeLog", "true");
         caps.setCapability("XCUITest", "true");
+        caps.setCapability("useNewWDA", "false");
         caps.setCapability("deviceName", device);
         caps.setCapability("app", appath);
         caps.setCapability("udid", phone_udid);
@@ -84,7 +85,7 @@ public class Smoke {
 
     }
 
-    public void Exit() {
+    private void Exit() {
 
         driver.quit();
 
