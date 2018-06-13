@@ -1,8 +1,6 @@
 package com.methods;
 
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileElement;
-import io.appium.java_client.TouchAction;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -10,16 +8,14 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import java.util.HashMap;
-import java.util.List;
 
-import static com.vars.consts.*;
-import static com.vars.vars.devicename;
-import static com.vars.vars.petname;
 import static com.vars.vars.screensize;
 
 public class Common {
 
     public AppiumDriver driver;
+    public String tabBar = "//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar";
+    public String navBar = "//XCUIElementTypeApplication[@name=\\\"Averia Collar\\\"]/XCUIElementTypeWindow[3]/XCUIElementTypeStatusBar/XCUIElementTypeOther[2]";
 
     Logger logger = Logger.getLogger(Common.class);
 
@@ -73,7 +69,7 @@ public class Common {
 
         logger.info(device + ": GOTO Main Screen");
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[1]").click();
-
+        scrollDown(navBar);
     }
 
     public void gotoMapScreen(String device) {
@@ -81,6 +77,7 @@ public class Common {
         logger.info(device + ": GOTO Map Screen");
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[2]").click();
 
+        iOSAllowAccess();
     }
 
     public void gotoProfileScreen(String device) {
@@ -90,22 +87,22 @@ public class Common {
 
     }
 
+
     public void ScreensShuffle() {
 
-        String tabBar = "//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar";
-        String navBar = "//XCUIElementTypeApplication[@name=\\\"Averia Collar\\\"]/XCUIElementTypeWindow[3]/XCUIElementTypeStatusBar/XCUIElementTypeOther[2]";
-
-        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[2]").click();
-        iOSAllowAccess();
-        sleep(1);
-        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[3]").click();
+        for (int i = 0; i < 2; i++) {
+            driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[2]").click();
+            iOSAllowAccess();
+            sleep(1);
+            driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[3]").click();
             sleep(1);
             scrollUp(tabBar);
             scrollDown(navBar);
-        driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[1]").click();
+            driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeTabBar/XCUIElementTypeButton[1]").click();
             sleep(1);
             scrollUp(tabBar);
             scrollDown(navBar);
+        }
     }
 
     public void phonePhoto () {
@@ -116,12 +113,12 @@ public class Common {
         driver.findElementByAccessibilityId("Готово").click();
     }
 
-    public void swipeUpToElementId(String elementId) {
+    public void swipeUpToElementId(String elementXpath) {
 
-        boolean isFoundTheElement = driver.findElements(By.id(elementId)).size() > 0;
+        boolean isFoundTheElement = driver.findElementsByXPath(elementXpath).size() > 0;
         while (!isFoundTheElement){
             swipeUp();
-            isFoundTheElement  = driver.findElements(By.id(elementId)).size() > 0;
+            isFoundTheElement  = driver.findElementsByXPath(elementXpath).size() > 0;
         }
 
     }
@@ -138,23 +135,23 @@ public class Common {
 
     public void scrollUp(String elementXpath){
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        HashMap scrollObject = new HashMap();
-        scrollObject.put("direction", "up");
+        HashMap scrollObject = new HashMap<>();
         scrollObject.put("xpath", elementXpath);
+        scrollObject.put("direction", "up");
         js.executeScript("mobile: swipe", scrollObject);
     }
 
     public void scrollDown(String elementXpath){
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        HashMap scrollObject = new HashMap();
-        scrollObject.put("direction", "down");
+        HashMap scrollObject = new HashMap<>();
         scrollObject.put("xpath", elementXpath);
+        scrollObject.put("direction", "down");
         js.executeScript("mobile: swipe", scrollObject);
     }
 
     public boolean isElementPresent(By by){
         try {
-            driver.findElements(by);
+            driver.findElement(by);
             return true;
         } catch (NoSuchElementException e){
             return false;

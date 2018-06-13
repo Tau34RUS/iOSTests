@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="iPhone6 Device Test" verbose="2">
-    <test name="iPhone6 Smoke">
+<suite name="iPhone5s Device Test" verbose="2">
+    <test name="iPhone5s Smoke">
         <parameter name="server_port" value="4730" />
-        <parameter name="device" value="iPhone 6" />
-        <parameter name="phone_udid" value="9c83ec584423c0f55972e2a8024b6bc1337aab97" />
+        <parameter name="device" value="iPhone Remi" />
+        <parameter name="phone_udid" value="8c370e985c6da7ed969a2ab66127bc5ebb9719e4" />
         <classes>
             <class name="com.tests.Smoke" />
         </classes>

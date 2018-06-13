@@ -66,7 +66,6 @@ public class Smoke {
 
         try {
             driver = new IOSDriver<WebElement>(new URL("http://127.0.0.1:"+port+"/wd/hub"), caps);
-
         } catch (MalformedURLException e) {
 
             e.printStackTrace();

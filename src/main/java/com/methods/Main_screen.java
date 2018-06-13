@@ -1,19 +1,14 @@
 package com.methods;
 
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.apache.log4j.Logger;
-import org.apache.tools.ant.filters.TokenFilter;
-import org.apache.tools.ant.taskdefs.condition.Contains;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
 import java.util.concurrent.TimeUnit;
-
-import static com.vars.vars.petname;
 
 public class Main_screen extends Common {
 
@@ -33,7 +28,7 @@ public class Main_screen extends Common {
         logger.info(device + ": Checking Main screen objects:");
 
         logger.info(device + ": - Top bar elements");
-        //driver.findElementByAccessibilityId(petname + " ").clear();- !!! - change ID
+
         driver.findElement(By.xpath("//XCUIElementTypeButton[contains(@name,'%')]")).clear();
 
         // - date on main screen: open date picker >> close >> previouse date >> naxt date
@@ -44,10 +39,20 @@ public class Main_screen extends Common {
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]").clear();//status
 
         logger.info(device + ": - Tracks and Achievements");
-        
-        scrollUp("//XCUIElementTypeStaticText[@name=\"Недавние прогулки\"]");
-        //swipeUp();
-        driver.findElementByXPath("//XCUIElementTypeStaticText[@name=\"Недавние прогулки\"]").click(); //Недавние прогулки
+
+        logger.info("scrollUp");
+
+        switch (device) {
+            case "iPhone Remi": {
+                swipeUp();
+                break;
+            }
+            case "iPhone 6":{
+                scrollUp(tabBar);
+                break;
+            }
+        }
+        driver.findElementByAccessibilityId("Недавние прогулки").click(); //Недавние прогулки
         driver.findElementByXPath("//XCUIElementTypeApplication[@name=\"Averia Collar\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]").click();//первый трек
         driver.findElementByAccessibilityId("Все прогулки").click();
         driver.navigate().back();
@@ -77,39 +82,52 @@ public class Main_screen extends Common {
 
     public void walkStats(String device) {
 
+        String currentPetName = driver.findElementByXPath("//*[@type='XCUIElementTypeNavigationBar']").getAttribute("name");
+
         logger.info(device + ": Checking Main screen stats");
         swipeDown();
         driver.findElementByAccessibilityId("Шаг").click();
         sleep(5);
         Assert.assertEquals("Ходьба", driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Ходьба\"]").getAttribute("name"));
-        if (isElementPresent(By.id("stats_noActivity"))) {
-            logger.error("Stats");
+        if (isElementPresent(By.id("Активности за сегодня нет"))) {
+            logger.info("No stats");
         } else {
-            logger.error("No stats");
+            logger.info("Stats not null");
         }
+
+        driver.findElementByAccessibilityId(currentPetName).click();
+
         driver.findElementByAccessibilityId("Бег").click();
         sleep(5);
         Assert.assertEquals("Бег и быстрый бег", driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Бег и быстрый бег\"]").getAttribute("name"));
-        if (isElementPresent(By.id("stats_noActivity"))) {
-            logger.error("Stats");
+        if (isElementPresent(By.id("Активности за сегодня нет"))) {
+            logger.info("No stats");
         } else {
-            logger.error("No stats");
+            logger.info("Stats not null");
         }
+
+        driver.findElementByAccessibilityId(currentPetName).click();
+
         driver.findElementByAccessibilityId("Отдых").click();
         sleep(5);
         Assert.assertEquals("Отдых", driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Отдых\"]").getAttribute("name"));
-        if (isElementPresent(By.id("stats_noActivity"))) {
-            logger.error("Stats");
+        if (isElementPresent(By.id("Активности за сегодня нет"))) {
+            logger.info("No stats");
         } else {
-            logger.error("No stats");
+            logger.info("Stats not null");
         }
+
+        driver.findElementByAccessibilityId(currentPetName).click();
+
         driver.findElementByAccessibilityId("Расход калорий").click();
         sleep(5);
         Assert.assertEquals("Расход калорий", driver.findElementByXPath("//XCUIElementTypeOther[@name=\"Расход калорий\"]").getAttribute("name"));
-        if (isElementPresent(By.id("stats_noActivity"))) {
-            logger.error("Stats");
+        if (isElementPresent(By.id("Активности за сегодня нет"))) {
+            logger.info("No stats");
         } else {
-            logger.error("No stats");
+            logger.info("Stats not null");
         }
+
+        driver.findElementByAccessibilityId(currentPetName).click();
     }
 }
